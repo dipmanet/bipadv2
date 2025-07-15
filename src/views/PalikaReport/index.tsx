@@ -105,7 +105,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 let finalArr = [];
 
-const domain = process.env.REACT_APP_API_SERVER_URL;
+const domain = import.meta.env.VITE_APP_API_SERVER_URL;
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
 	const [showModal, setshowModal] = useState(true);

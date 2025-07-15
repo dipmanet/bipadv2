@@ -102,7 +102,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
 	}
 
 	private getSuggestedUsesList = () => {
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/suggested-use`)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/suggested-use`)
 			.then((response) => response.json())
 			.then((data) => {
 				this.setState({
@@ -114,7 +114,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
 
 	getSingleSuggestedList = () => {
 		const { openspaceId } = this.props;
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-suggested/?open_space=${openspaceId}`)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-suggested/?open_space=${openspaceId}`)
 			.then((response) => response.json())
 			.then((data) => {
 				const singleSuggestedUsesIds = data.results.map((use: SuggestedUse) => use.suggestedUse);
@@ -174,7 +174,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
 						"Content-Type": "application/json",
 					},
 				};
-				fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-suggested/`, requestOptions)
+				fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-suggested/`, requestOptions)
 					.then((response) => response.json())
 					.then(() => {
 						if (i === checkedSuggestedUses.length - 1) {

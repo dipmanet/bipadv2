@@ -360,7 +360,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 		if (matchedFiscalYear.length) {
 			axios
 				.put(
-					`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${matchedFiscalYear[0].id}/`,
+					`${import.meta.env.VITE_APP_API_SERVER_URL}/disaster-profile/${matchedFiscalYear[0].id}/`,
 					formdata,
 					{
 						headers: {
@@ -427,7 +427,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 				});
 		} else {
 			axios
-				.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, {
+				.post(`${import.meta.env.VITE_APP_API_SERVER_URL}/disaster-profile/`, formdata, {
 					headers: {
 						"content-type": "multipart/form-data",
 					},

@@ -18,7 +18,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 
 export default function PopulationChart(props) {
 	const { populationCustomTooltip, populationData, renderLegendPopulaion } = props;

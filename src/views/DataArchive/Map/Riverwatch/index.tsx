@@ -20,7 +20,7 @@ const mapStateToProps = (state) => ({
 });
 
 const tileUrl = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 	"&version=1.1.0",
 	"&service=WMS",
 	"&request=GetMap",
@@ -35,7 +35,7 @@ const tileUrl = [
 ].join("");
 
 const GIS_URL = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
 	"service=WFS",
 	"&version=1.0.0",
 	"&request=GetFeature",
@@ -130,12 +130,12 @@ class RiverMap extends React.PureComponent {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.riverStation !== this.props.riverStation) {
-			// eslint-disable-next-line prefer-const
+			 
 			let basinCoordinates = [];
 			// eslint-disable-next-line react/no-did-update-set-state
 			this.setState({ rasterLayers: [] });
 			if (this.props.riverFilters.basin != null) {
-				// eslint-disable-next-line max-len
+				 
 				const mydata = this.props.riverStation.filter(
 					(item) => item.basin === this.props.riverFilters.basin.title
 				);
@@ -146,7 +146,7 @@ class RiverMap extends React.PureComponent {
 						basinCoordinates = mydata[0].point.coordinates;
 					}
 					const tile = [
-						`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+						`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 						"&service=WMS",
 						"&version=1.1.1",
 						"&request=GetMap",
@@ -158,7 +158,7 @@ class RiverMap extends React.PureComponent {
 						"&bbox={bbox-epsg-3857}",
 						"&transparent=true",
 						"&format=image/png",
-						// eslint-disable-next-line max-len
+						 
 						`&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
 					].join("");
 
@@ -169,7 +169,7 @@ class RiverMap extends React.PureComponent {
 							tiles: tile,
 						},
 					];
-					// eslint-disable-next-line max-len
+					 
 					if (Object.keys(this.props.riverFilters.basin).length === 0) {
 						// eslint-disable-next-line react/no-did-update-set-state
 						this.setState({ rasterLayers: [] });

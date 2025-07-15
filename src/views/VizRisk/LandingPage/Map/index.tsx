@@ -17,7 +17,7 @@ const mapStateToProps = (state: AppState) => ({
 	municipalities: municipalitiesSelector(state),
 });
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;

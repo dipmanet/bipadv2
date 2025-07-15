@@ -56,7 +56,7 @@ class Media extends React.PureComponent<Props, State> {
 			body: formdata,
 			// credentials: 'same origin'
 		};
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-media/`, requestOptions)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-media/`, requestOptions)
 			.then((data) => {
 				if (data.status === 201) {
 					if (count === totalCount - 1) {

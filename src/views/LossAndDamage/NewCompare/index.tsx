@@ -262,7 +262,7 @@ class NewCompare extends React.PureComponent {
 
 			fetch(
 				`${
-					process.env.REACT_APP_API_SERVER_URL
+					import.meta.env.VITE_APP_API_SERVER_URL
 				}/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(
 					","
 				)}&summary_type=${summaryType}&incident_on__gt=${

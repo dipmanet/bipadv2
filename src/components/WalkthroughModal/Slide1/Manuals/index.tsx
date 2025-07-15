@@ -31,7 +31,7 @@ const Manuals = ({ language: { language } }) => {
 	};
 	useEffect(() => {
 		const fetchedData = async () => {
-			await fetch(`${process.env.REACT_APP_API_SERVER_URL}/manual/`)
+			await fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/manual/`)
 				.then((res) => res.json())
 				.then((data) => {
 					const yearData = data.results.map((i) => i.year);

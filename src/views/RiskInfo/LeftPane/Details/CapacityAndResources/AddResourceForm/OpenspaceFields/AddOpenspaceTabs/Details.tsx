@@ -109,7 +109,7 @@ class Details extends React.PureComponent<Props, State> {
 			// redirect: 'follow',
 		};
 
-		const url = process.env.REACT_APP_API_SERVER_URL;
+		const url = import.meta.env.VITE_APP_API_SERVER_URL;
 		const splittedUrl = url.split("/api");
 
 		fetch(`${splittedUrl[0]}/en/api/v1/shape/`, requestOptions)
@@ -144,7 +144,7 @@ class Details extends React.PureComponent<Props, State> {
 			// credentials: 'same origin'
 		};
 		LoadingSuccessHalt(true);
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/openspace-detail/${objectId}/`, requestOptions)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/openspace-detail/${objectId}/`, requestOptions)
 			.then((res) => {
 				if (res.status === 200) {
 					this.props.handleTabClick("suggestedUses");

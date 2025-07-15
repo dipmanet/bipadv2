@@ -22,7 +22,7 @@ const mapStateToProps = (state) => ({
 });
 
 const tileUrl = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 	"&version=1.1.0",
 	"&service=WMS",
 	"&request=GetMap",
@@ -38,7 +38,7 @@ const tileUrl = [
 
 // added
 const GIS_URL = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
 	"service=WFS",
 	"&version=1.0.0",
 	"&request=GetFeature",
@@ -144,11 +144,11 @@ class RainMap extends React.PureComponent {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.rainStation !== this.props.rainStation) {
-			// eslint-disable-next-line prefer-const
+			 
 			let basinCoordinates = [];
 
 			if (this.props.rainFilters.basin != null) {
-				// eslint-disable-next-line max-len
+				 
 				const mydata = this.props.rainStation.filter(
 					(item) => item.basin === this.props.rainFilters.basin.title
 				);
@@ -156,7 +156,7 @@ class RainMap extends React.PureComponent {
 				if (mydata.length > 0) {
 					basinCoordinates = mydata[0].point.coordinates;
 					const tile = [
-						`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+						`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 						"&service=WMS",
 						"&version=1.1.1",
 						"&request=GetMap",
@@ -168,7 +168,7 @@ class RainMap extends React.PureComponent {
 						"&bbox={bbox-epsg-3857}",
 						"&transparent=true",
 						"&format=image/png",
-						// eslint-disable-next-line max-len
+						 
 						`&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
 					].join("");
 
@@ -179,7 +179,7 @@ class RainMap extends React.PureComponent {
 							tiles: tile,
 						},
 					];
-					// eslint-disable-next-line max-len
+					 
 					if (!(this.props.rainFilters.basin && Object.keys(this.props.rainFilters.basin).length)) {
 						// eslint-disable-next-line react/no-did-update-set-state
 						this.setState({ rasterLayers: [] });

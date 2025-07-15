@@ -153,7 +153,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
 	public getRasterLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

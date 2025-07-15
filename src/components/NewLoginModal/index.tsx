@@ -1,13 +1,8 @@
-/* eslint-disable operator-linebreak */
-/* eslint-disable comma-dangle */
-/* eslint-disable arrow-parens */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable css-modules/no-undef-class */
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable quotes */
-/* eslint-disable max-len */
-/* eslint-disable max-len */
+
 import React from "react";
 import Redux from "redux";
 import { connect } from "react-redux";
@@ -615,7 +610,7 @@ class Login extends React.PureComponent<Props, State> {
 											{t("Other logins:")}
 											<a
 												className={styles.extlink}
-												href={`${process.env.REACT_APP_PROJECT_SERVER_URL}`}
+												href={`${import.meta.env.VITE_APP_PROJECT_SERVER_URL}`}
 												target="_blank"
 												rel="noopener noreferrer">
 												<div className={styles.linktexts}>

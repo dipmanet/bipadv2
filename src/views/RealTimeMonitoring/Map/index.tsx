@@ -1,7 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
-/* eslint-disable indent */
+ 
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-nested-ternary */
+ 
 import React from "react";
 import { Translation } from "react-i18next";
 import { connect } from "react-redux";
@@ -55,7 +55,7 @@ RealTimeTooltip.propTypes = {
 	params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 const tileUrl = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 	"&version=1.1.0",
 	"&service=WMS",
 	"&request=GetMap",
@@ -70,7 +70,7 @@ const tileUrl = [
 ].join("");
 
 const GIS_URL = [
-	`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+	`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
 	"service=WFS",
 	"&version=1.0.0",
 	"&request=GetFeature",
@@ -88,7 +88,7 @@ const mapStateToProps = (state) => ({
 
 const requestOptions = {
 	streamFlowDataGetRequest: {
-		url: process.env.REACT_APP_STREAMFLOW_URL,
+		url: import.meta.env.VITE_APP_STREAMFLOW_URL,
 		method: methods.GET,
 		onSuccess: ({ response, params }) => {
 			params.setStreamData(response);
@@ -145,10 +145,10 @@ class RealTimeMap extends React.PureComponent {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.riverFilters !== this.props.riverFilters) {
-			// eslint-disable-next-line prefer-const
+			 
 			let basinCoordinates = [];
 			if (this.props.riverFilters.basin != null) {
-				// eslint-disable-next-line max-len
+				 
 				const mydata = this.props.rainStation.filter(
 					(item) => item.basin === this.props.riverFilters.basin.title
 				);
@@ -156,7 +156,7 @@ class RealTimeMap extends React.PureComponent {
 				if (mydata.length > 0) {
 					basinCoordinates = mydata[0].point.coordinates;
 					const tileData = [
-						`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+						`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
 						"service=WFS",
 						"&version=1.0.0",
 						"&request=GetFeature",

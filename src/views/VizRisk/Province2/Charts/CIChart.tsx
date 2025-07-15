@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from "react";
 import {
 	Bar,
@@ -18,7 +18,7 @@ import {
 
 import { customLableList } from "../Functions";
 
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 
 export default function BuildingChart(props) {
 	const { buildingsChartData, vulnrerability } = props;
@@ -58,7 +58,7 @@ export default function BuildingChart(props) {
 								? [(dataMin) => Math.floor(dataMin - 10), (dataMax) => Math.floor(dataMax + 5)]
 								: [
 										(dataMin) => parseFloat(dataMin - 0.1).toFixed(2),
-										// eslint-disable-next-line @typescript-eslint/indent
+										// eslint-disable-next-line indent
 										(dataMax) => parseFloat(dataMax + 0.1).toFixed(2),
 								  ]
 						}>

@@ -14,8 +14,8 @@ import schema from "#schema";
 import { sanitizeResponse } from "#utils/common";
 import { getAuthState } from "#utils/session";
 
-const wsEndpoint = import.meta.env.REACT_APP_API_SERVER_URL;
-const domain = import.meta.env.REACT_APP_DOMAIN;
+const wsEndpoint = import.meta.env.VITE_APP_API_SERVER_URL;
+const domain = import.meta.env.VITE_APP_DOMAIN;
 
 const isFile = (input: any): input is File => "File" in window && input instanceof File;
 const isBlob = (input: any): input is Blob => "Blob" in window && input instanceof Blob;

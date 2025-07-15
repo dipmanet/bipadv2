@@ -61,7 +61,7 @@ const Developers = ({ language: { language } }) => {
 	const firstPageId = sidebar.length && sidebar[0].childs[0].id;
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-developers-menu`)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/homepage-developers-menu`)
 			.then((response) => response.json())
 			.then((data) => setContent(data.results));
 	}, []);

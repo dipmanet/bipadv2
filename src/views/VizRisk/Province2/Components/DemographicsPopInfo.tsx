@@ -4,7 +4,7 @@ import ManWoman from "#views/VizRisk/Tikapur/Icons/ManWoman.svg";
 import Male from "#views/VizRisk/Tikapur/Icons/male.svg";
 import Female from "#views/VizRisk/Tikapur/Icons/female.svg";
 import Home from "#views/VizRisk/Tikapur/Icons/home.svg";
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 import { parseStringToNumber } from "../Functions";
 
 export default function DemographicsPopInfo(props) {

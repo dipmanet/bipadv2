@@ -9,3 +9,6 @@ export const BaseLayout = React.lazy(() => import("#components/Layouts/BaseLayou
 
 // dashboard
 export const Dashboard = React.lazy(() => import("#views/Dashboard"));
+
+// vizrisk
+export const Vizrisk = React.lazy(() => import("#views/VizRisk"));

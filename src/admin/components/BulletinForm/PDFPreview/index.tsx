@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 	setBulletinEditData: (params) => dispatch(setBulletinEditDataAction(params)),
 });
 
-const baseUrl = process.env.REACT_APP_API_SERVER_URL;
+const baseUrl = import.meta.env.VITE_APP_API_SERVER_URL;
 
 const PDFPreview = (props) => {
 	const [province, setProvince] = useState(null);

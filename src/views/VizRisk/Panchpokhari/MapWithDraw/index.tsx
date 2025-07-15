@@ -28,7 +28,7 @@ const ciRef = {
 };
 const rasterLayers = ["5", "10", "20", "50", "75", "100", "200", "250", "500", "1000"];
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }
@@ -70,10 +70,10 @@ class FloodHistoryMap extends React.Component {
 			});
 		}, 1000);
 
-		mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+		mapboxgl.accessToken = import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN;
 		this.map = new mapboxgl.Map({
 			container: this.mapContainer,
-			style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
+			style: import.meta.env.VITE_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
 			center: [lng, lat],
 			zoom,
 			minZoom: 2,
@@ -655,7 +655,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getRasterLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",
@@ -671,7 +671,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getFloodRasterLayer = (layerName: string) =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

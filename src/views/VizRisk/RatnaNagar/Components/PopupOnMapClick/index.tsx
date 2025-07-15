@@ -18,7 +18,7 @@ const PopupOnMapClick = (props: Props) => {
 
 	const fetchHouseData = async () => {
 		const housedata = await fetch(
-			`${process.env.REACT_APP_API_SERVER_URL}/vizrisk-household/${houseId}/?meta=true`
+			`${import.meta.env.VITE_APP_API_SERVER_URL}/vizrisk-household/${houseId}/?meta=true`
 		).then((res) => res.json());
 		setHouseData(housedata);
 		setLoading(false);

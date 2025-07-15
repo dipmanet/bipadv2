@@ -71,7 +71,7 @@ const Faqs = ({ language: { language } }) => {
 		sidebar[sidebar.length - 1].childs[sidebar[sidebar.length - 1].childs.length - 1].id;
 	const firstPageId = sidebar.length && sidebar[0].childs[0].id;
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-faq-menu`)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/homepage-faq-menu`)
 			.then((response) => response.json())
 			.then((data) => setContent(data.results));
 	}, []);

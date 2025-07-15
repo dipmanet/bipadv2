@@ -218,7 +218,7 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
 						"Content-Type": "application/json",
 					},
 				};
-				fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-amenities/`, requestOptions)
+				fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-amenities/`, requestOptions)
 					.then((response) => response.json())
 					.then(() => {
 						if (i === allAmenitiesToPost.length - 1) {
@@ -248,7 +248,7 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
 					},
 				};
 				fetch(
-					`${process.env.REACT_APP_API_SERVER_URL}/open-amenities/${singleAmenitiesList[i].id}/`,
+					`${import.meta.env.VITE_APP_API_SERVER_URL}/open-amenities/${singleAmenitiesList[i].id}/`,
 					requestOptions
 				)
 					.then((response) => response.json())

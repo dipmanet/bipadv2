@@ -35,7 +35,7 @@ import LayerButton from "./LayerButton";
 const mapStyles = [
 	{
 		name: "none",
-		style: `${process.env.REACT_APP_MAP_STYLE_NONE}`,
+		style: `${import.meta.env.VITE_APP_MAP_STYLE_NONE}`,
 		color: "#dddddd",
 		title: "Download Default Map",
 		description: "A Default Size Map",

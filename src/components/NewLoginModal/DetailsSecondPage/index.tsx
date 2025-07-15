@@ -43,7 +43,7 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
-// const domain = process.env.REACT_APP_DOMAIN;
+// const domain = import.meta.env.VITE_APP_DOMAIN;
 const sampleLetterURL = "/media/password_request_document_sample.docx";
 
 const DetailsSecondPage = (props: Props) => {
@@ -128,7 +128,7 @@ const DetailsSecondPage = (props: Props) => {
 								</div>
 								<ReCaptcha
 									faramElementName="recaptcha"
-									siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+									siteKey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY}
 									onChange={handleCaptchaChange}
 								/>
 								{uploaderr && showErr ? (

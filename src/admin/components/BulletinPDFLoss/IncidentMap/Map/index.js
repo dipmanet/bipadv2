@@ -134,7 +134,7 @@ const IncidentMap = (props) => {
 
 		const Map = new mapboxgl.Map({
 			container: mapContainer,
-			style: process.env.REACT_APP_MAP_STYLE_NONE,
+			style: import.meta.env.VITE_APP_MAP_STYLE_NONE,
 			zoom: 5.0,
 			center: [84, 27],
 			minZoom: 2,
@@ -149,11 +149,11 @@ const IncidentMap = (props) => {
 		Map.on("style.load", () => {
 			Map.addSource("nepal", {
 				type: "vector",
-				url: process.env.REACT_APP_MAP_SOURCE_NEPAL,
+				url: import.meta.env.VITE_APP_MAP_SOURCE_NEPAL,
 			});
 			Map.addSource("nepal-centroid", {
 				type: "vector",
-				url: process.env.REACT_APP_MAP_SOURCE_NEPAL_CENTROID,
+				url: import.meta.env.VITE_APP_MAP_SOURCE_NEPAL_CENTROID,
 			});
 			Map.addLayer({
 				id: "province-line",

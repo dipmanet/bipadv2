@@ -104,7 +104,7 @@ class Details extends React.PureComponent<Props, State> {
 			body: formdata,
 			// credentials: 'same origin'
 		};
-		const url = process.env.REACT_APP_API_SERVER_URL;
+		const url = import.meta.env.VITE_APP_API_SERVER_URL;
 		const splittedUrl = url.split("/api");
 
 		fetch(`${splittedUrl[0]}/en/api/v1/shape/`, requestOptions)
@@ -141,7 +141,7 @@ class Details extends React.PureComponent<Props, State> {
 		};
 
 		fetch(
-			`${process.env.REACT_APP_API_SERVER_URL}/communityspace-detail/${objectId}/`,
+			`${import.meta.env.VITE_APP_API_SERVER_URL}/communityspace-detail/${objectId}/`,
 			requestOptions
 		)
 			.then((response) => response.json())

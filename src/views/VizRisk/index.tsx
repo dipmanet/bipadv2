@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import React, { useEffect, useRef, useState } from "react";
 import { compose } from "redux";
 import {
@@ -25,8 +25,8 @@ import Ratnanagar from "./RatnaNagar";
 import styles from "./styles.module.scss";
 import Map from "./LandingPage/Map";
 import LayerToggle from "./LandingPage/Components/LayerToggle";
-import ThemeSelector from "./LandingPage/Components/ThemeSelector";
-import LabelSearch from "./LandingPage/Components/LabelSearch";
+// import ThemeSelector from "./LandingPage/Components/ThemeSelector";
+// import LabelSearch from "./LandingPage/Components/LabelSearch";
 import VisRiskTourSlider from "./LandingPage/Components/TourSlider";
 import tourContents from "./expressions";
 

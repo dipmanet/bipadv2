@@ -184,7 +184,7 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
 								/>
 								<ReCaptcha
 									faramElementName="recaptcha"
-									siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+									siteKey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY}
 								/>
 							</ModalBody>
 							<ModalFooter>

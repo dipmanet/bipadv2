@@ -18,7 +18,7 @@ export const getGeoJSONPH = (filterBy: string, data: any) => {
 };
 // Jugal_hillshade
 export const getHillShadeLayer = (layer: string) => [
-    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
     '&version=1.1.1',
     '&service=WMS',
     '&request=GetMap',
@@ -33,7 +33,7 @@ export const getHillShadeLayer = (layer: string) => [
 ].join('');
 
 export const getgeoJsonLayer = (layer: string) => [
-    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
     '&version=1.1.0',
     '&service=WFS',
     '&request=GetFeature',

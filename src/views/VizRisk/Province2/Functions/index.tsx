@@ -5,7 +5,7 @@ import RiverTooltip from "#views/Dashboard/Map/Tooltips/Alerts/River";
 import FireTooltip from "#views/Dashboard/Map/Tooltips/Alerts/Fire";
 import PollutionTooltip from "#views/Dashboard/Map/Tooltips/Alerts/Pollution";
 import { ChartData } from "../../../DataArchive/Modals/Pollution/types";
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 
 export const parseStringToNumber = (content) => {
 	// const changedNumber = parseInt(content, 10);

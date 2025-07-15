@@ -22,7 +22,7 @@ import styles from "./styles.module.scss";
 import expressions from "../Data/expressions";
 import EarthquakeHazardLegends from "../Legends/EarthquakeHazardLegend";
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }
@@ -75,10 +75,10 @@ class FloodHistoryMap extends React.Component {
 	public componentDidMount() {
 		const { lng, lat, zoom, opacitySes, opacitySus } = this.state;
 
-		mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+		mapboxgl.accessToken = import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN;
 		this.map = new mapboxgl.Map({
 			container: this.mapContainer,
-			style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+			style: import.meta.env.VITE_APP_VIZRISK_JUGAL_LANDSLIDE,
 			center: [lng, lat],
 			zoom,
 			minZoom: 2,
@@ -591,7 +591,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getRasterLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",
@@ -607,7 +607,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getFloodRasterLayer = (layerName: string) =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

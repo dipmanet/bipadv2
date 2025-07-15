@@ -141,7 +141,7 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
 						"Content-Type": "application/json",
 					},
 				};
-				fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-eia/`, requestOptions)
+				fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-eia/`, requestOptions)
 					.then((response) => response.json())
 					.then(() => {
 						if (i === allEiaToPost.length - 1) {
@@ -173,7 +173,7 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
 				"Content-Type": "application/json",
 			},
 		};
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-eia/${id}/`, requestOptions)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/open-eia/${id}/`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log("PUT success..");

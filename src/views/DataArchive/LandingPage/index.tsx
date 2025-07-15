@@ -38,7 +38,7 @@ const LandingPage = (props: Props) => {
 
 	// const getDataCount = async () => {
 	//     const endPoint = '/archive-meta/';
-	//     const URL = `${process.env.REACT_APP_API_SERVER_URL}${endPoint}`;
+	//     const URL = `${import.meta.env.VITE_APP_API_SERVER_URL}${endPoint}`;
 	//     const response = await fetch(URL);
 	//     response.json()
 	//         .then(res => setCounts(res))

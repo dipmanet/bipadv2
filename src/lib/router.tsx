@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
-import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound } from "#lib/routes";
+import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound, Vizrisk } from "#lib/routes";
 
 export const router = createBrowserRouter([
 	{
@@ -25,6 +25,21 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				element: <Dashboard />,
+			},
+		],
+	},
+	{
+		path: "/vizrisk",
+		element: (
+			<BaseLayout>
+				<Outlet />
+			</BaseLayout>
+		),
+		errorElement: <ErrorBoundary />,
+		children: [
+			{
+				index: true,
+				element: <Vizrisk />,
 			},
 		],
 	},

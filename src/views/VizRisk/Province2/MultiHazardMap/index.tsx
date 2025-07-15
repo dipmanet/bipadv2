@@ -147,7 +147,7 @@ type Props = OwnProps & PropsFromAppState;
 
 type LngLat = any[];
 const UNSUPPORTED_BROWSER = !mapboxgl.supported();
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }

@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/indent */
 
 import React from "react";
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 import { ChartData } from "../../../DataArchive/Modals/Pollution/types";
 
 export const parseStringToNumber = (content) => {

@@ -298,7 +298,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 				region: { adminLevel, geoarea },
 			} = filters;
 			const { incidentType } = this.state;
-			// Convertion of the nepali date   // fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+			// Convertion of the nepali date   // fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
 			//     .then(res => res.json())
 			//     .then((data) => {
 			//         this.setState({ incidentData: data.results, isLoading: false });
@@ -364,7 +364,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
 			fetch(
 				`${
-					process.env.REACT_APP_API_SERVER_URL
+					import.meta.env.VITE_APP_API_SERVER_URL
 				}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(
 					","
 				)}&summary_type=${summaryType}&incident_on__gt=${
@@ -663,7 +663,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
 			fetch(
 				`${
-					process.env.REACT_APP_API_SERVER_URL
+					import.meta.env.VITE_APP_API_SERVER_URL
 				}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(
 					","
 				)}&summary_type=${summaryType}&incident_on__gt=${
@@ -722,7 +722,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 			this.setState({ incidentType: incidentTypeData });
 			fetch(
 				`${
-					process.env.REACT_APP_API_SERVER_URL
+					import.meta.env.VITE_APP_API_SERVER_URL
 				}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(
 					","
 				)}&summary_type=${summaryTypeData}&incident_on__gt=${

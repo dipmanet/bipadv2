@@ -290,7 +290,7 @@ const mapStateToProps = (state, props) => ({
 	filters: projectsProfileFiltersSelector(state),
 });
 
-const wsEndpoint = process.env.REACT_APP_PROJECT_SERVER_URL || "http://165.22.215.64/pims";
+const wsEndpoint = import.meta.env.VITE_APP_PROJECT_SERVER_URL || "http://165.22.215.64/pims";
 
 const requestOptions = {
 	ndrrsapRequest: {

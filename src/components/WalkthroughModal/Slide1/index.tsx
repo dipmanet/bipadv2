@@ -63,7 +63,7 @@ const Slide1 = (props) => {
 		setRun({ value: true });
 	};
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-content`)
+		fetch(`${import.meta.env.VITE_APP_API_SERVER_URL}/homepage-content`)
 			.then((response) => response.json())
 			.then((data) => setContent(data.results));
 	}, []);

@@ -20,7 +20,9 @@ import styles from "./styles.module.scss";
 // eslint-disable-next-line import/no-unresolved
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // eslint-disable-next-line import/no-unresolved
-mapboxgl.workerClass = require("mapbox-gl/dist/mapbox-gl-csp-worker").default;
+import("mapbox-gl/dist/mapbox-gl-csp-worker").then((worker) => {
+  mapboxgl.workerClass = worker.default;
+});
 
 const mapStateToProps = (state, props) => ({
 	// provinces: provincesSelector(state),
@@ -54,7 +56,7 @@ const Deck = (props) => {
 		};
 	const getHillshadeLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",
@@ -70,7 +72,7 @@ const Deck = (props) => {
 
 	const getSusceptibilityLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.0",
 			"&service=WMS",
 			"&request=GetMap",
@@ -378,8 +380,8 @@ const Deck = (props) => {
 										// reuseMaps
 										ref={mapRef}
 										gl={glContext}
-										mapStyle={process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE}
-										mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+										mapStyle={import.meta.env.VITE_APP_VIZRISK_BAHRABISE_LANDSLIDE}
+										mapboxApiAccessToken={import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN}
 										onLoad={onMapLoad}
 									/>
 								)}

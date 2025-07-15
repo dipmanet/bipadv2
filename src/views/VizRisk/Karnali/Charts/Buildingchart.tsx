@@ -15,9 +15,9 @@ import {
 	YAxis,
 } from "recharts";
 
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 
-export default function AlertsChart(props) {
+export default function BuildingChart(props) {
 	const { buildingsChartData } = props;
 
 	const buildingToolTip = ({ active, payload, label }) => {

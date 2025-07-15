@@ -207,10 +207,10 @@ class FloodHistoryMap extends React.Component {
 				return null;
 			});
 		}
-		mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+		mapboxgl.accessToken = import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN;
 		this.map = new mapboxgl.Map({
 			container: this.mapContainer,
-			style: process.env.REACT_APP_VIZRISK_DHANGADI_FLOOD,
+			style: import.meta.env.VITE_APP_VIZRISK_DHANGADI_FLOOD,
 			center: [lng, lat],
 			zoom,
 			minZoom: 2,
@@ -820,7 +820,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getRasterLayer = (years: number) =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

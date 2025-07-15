@@ -11,7 +11,7 @@ import {
 	YAxis,
 } from "recharts";
 import { parseStringToNumber } from "../Functions";
-import styles from "../LeftPan./styles.module.scss";
+import styles from "../LeftPane/styles.module.scss";
 
 export default function EstimatedLossChart({ estimatedLossData, clickedHazardItem }) {
 	const convertToInternationalCurrencySystem = (labelValue) =>

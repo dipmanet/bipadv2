@@ -27,7 +27,7 @@ import styles from "./styles.module.scss";
 const mapStyles = (language: string) => [
 	{
 		name: "none",
-		style: `${process.env.REACT_APP_MAP_STYLE_NONE}`,
+		style: `${import.meta.env.VITE_APP_MAP_STYLE_NONE}`,
 		color: "#dddddd",
 		title: "Outline",
 		description:
@@ -54,7 +54,7 @@ const mapStyles = (language: string) => [
 	},
 	{
 		name: "light",
-		style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
+		style: `${import.meta.env.VITE_APP_MAP_STYLE_LIGHT}`,
 		color: "#cdcdcd",
 		title: "Mapbox Light",
 		description:
@@ -65,7 +65,7 @@ const mapStyles = (language: string) => [
 	},
 	{
 		name: "roads",
-		style: `${process.env.REACT_APP_MAP_STYLE_ROADS}`,
+		style: `${import.meta.env.VITE_APP_MAP_STYLE_ROADS}`,
 		color: "#671076",
 		title: "Mapbox Roads",
 		description:
@@ -76,7 +76,7 @@ const mapStyles = (language: string) => [
 	},
 	{
 		name: "satellite",
-		style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
+		style: `${import.meta.env.VITE_APP_MAP_STYLE_SATELLITE}`,
 		color: "#c89966",
 		title: "Mapbox Satellite",
 		description:

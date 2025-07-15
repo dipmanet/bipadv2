@@ -163,7 +163,7 @@ class VizriskMap extends React.PureComponent {
 	//     console.log('in function layername: ', layer.layerName);
 	//     console.log('infunction: layer ', layer);
 	//     const url = [
-	//         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+	//         `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 	//         '&version=1.1.1',
 	//         '&service=WMS',
 	//         '&request=GetMap',
@@ -182,7 +182,7 @@ class VizriskMap extends React.PureComponent {
 
 	getRasterTile = (layer) => {
 		const url = [
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",
@@ -200,7 +200,7 @@ class VizriskMap extends React.PureComponent {
 	};
 	// getRasterTile = (layer.layername) => {
 	//     return [
-	//         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+	//         `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 	//         '&version=1.1.1',
 	//         '&service=WMS',
 	//         '&request=GetMap',
@@ -302,7 +302,7 @@ class VizriskMap extends React.PureComponent {
 		];
 
 		// const tileUrl = [
-		//     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+		//     `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 		//     '&version=1.1.1',
 		//     '&service=WMS',
 		//     '&request=GetMap',
@@ -317,7 +317,7 @@ class VizriskMap extends React.PureComponent {
 		// ].join('');
 
 		// const tileUrl1 = [
-		//     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+		//     `${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 		//     '&version=1.1.1',
 		//     '&service=WMS',
 		//     '&request=GetMap',
@@ -332,7 +332,7 @@ class VizriskMap extends React.PureComponent {
 		// ].join('');
 
 		const tileUrl2 = [
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

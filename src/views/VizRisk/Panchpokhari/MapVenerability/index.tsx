@@ -24,7 +24,7 @@ import styles from "./styles.module.scss";
 import expressions from "../Data/expressions";
 import EarthquakeHazardLegends from "../Legends/EarthquakeHazardLegend";
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }
@@ -70,14 +70,14 @@ class FloodHistoryMap extends React.Component {
 			opacitySus: 0.5,
 			opacityFlood: 0.5,
 			currentPoint: null,
-			mapStyle: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
+			mapStyle: import.meta.env.VITE_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
 		};
 	}
 
 	public componentDidMount() {
 		const { lng, lat, zoom, opacitySes, opacitySus } = this.state;
 
-		mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+		mapboxgl.accessToken = import.meta.env.VITE_APP_MAPBOX_ACCESS_TOKEN;
 		this.map = new mapboxgl.Map({
 			container: this.mapContainer,
 			style: this.state.mapStyle,
@@ -429,8 +429,8 @@ class FloodHistoryMap extends React.Component {
 	public handleButtonClick = () => {
 		// showing the data add form
 		this.props.handleShowAddForm(true);
-		// this.map.setStyle(process.env.REACT_APP_MAP_STYLE_SATELLITE);
-		// this.setState({ mapStyle: process.env.REACT_APP_MAP_STYLE_SATELLITE });
+		// this.map.setStyle(import.meta.env.VITE_APP_MAP_STYLE_SATELLITE);
+		// this.setState({ mapStyle: import.meta.env.VITE_APP_MAP_STYLE_SATELLITE });
 		// change the popup
 		this.showPopupOnBldgs(
 			this.state.cood,
@@ -584,7 +584,7 @@ class FloodHistoryMap extends React.Component {
 
 	public getRasterLayer = () =>
 		[
-			`${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+			`${import.meta.env.VITE_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
 			"&version=1.1.1",
 			"&service=WMS",
 			"&request=GetMap",

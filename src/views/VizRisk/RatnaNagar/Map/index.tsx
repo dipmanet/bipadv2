@@ -31,7 +31,7 @@ import RadioButton from "../Components/RadioButton";
 import InundationLegend from "../Components/Legends/InundationLegendHomepage";
 import { floodHazardLayersArr } from "../expressions";
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+const { VITE_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = import.meta.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }
@@ -204,7 +204,7 @@ const Map = (props: any) => {
 		const multihazardMap = new mapboxgl.Map({
 			container: mapContainer,
 			style: "mapbox://styles/yilab/cl02b42zi00b414qm2i7xqqex",
-			// style: process.env.REACT_APP_VIZRISK_RAJAPUR_FLOOD,
+			// style: import.meta.env.VITE_APP_VIZRISK_RAJAPUR_FLOOD,
 
 			// center: [
 			//     84.51393887409917,

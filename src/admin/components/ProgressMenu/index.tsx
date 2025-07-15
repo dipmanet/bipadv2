@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LanguageToggle from '#components/LanguageToggle';
@@ -81,7 +81,7 @@ const validatorMenu = [
 
 const getMenu = () => {
     const location = window.location.href;
-    const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1].split('/admin')[1];
+    const menuSlug = location.split(`${import.meta.env.VITE_APP_DOMAIN}`)[1].split('/admin')[1];
     if (menuSlug.includes('health')) {
         return (Menu.healthProgressMenu);
     }
