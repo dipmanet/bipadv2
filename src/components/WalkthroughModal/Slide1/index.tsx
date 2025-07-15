@@ -25,7 +25,7 @@ import {
 } from "#actionCreators";
 
 import LanguageToggle from "#components/LanguageToggle";
-import about from "#resources/icons/about.svg";
+import about from "#resources/icons/aboutslide.svg";
 import technicalSupport from "#resources/icons/technicalsupport.svg";
 import manuals from "#resources/icons/manuals.svg";
 import faq from "#resources/icons/faqs.svg";
