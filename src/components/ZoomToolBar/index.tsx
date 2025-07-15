@@ -8,7 +8,7 @@ import DrawIcon from "./icons/bbox.svg";
 import GlobeIcon from "./icons/latlng.svg";
 import NavigationIcon from "./icons/navigation.svg";
 import SearchIcon from "./icons/search.svg";
-import ReloadIcon from "./icons/reset.svg";
+import ReloadIcon from "./icons/resetme.svg";
 import FullScreenIcon from "./icons/fullscreen.svg";
 
 interface OwnProps {

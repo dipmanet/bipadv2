@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useContext, useEffect, useState } from "react";
 import { MainPageDataContext } from "#views/VizRisk/RatnaNagar/context";
-import Return from "#resources/icons/Reset.svg";
+import Return from "#resources/icons/resetme.svg";
 
 import { rangeData } from "#views/VizRisk/RatnaNagar/expressions";
 import { getCurrentType } from "#views/VizRisk/RatnaNagar/utils";

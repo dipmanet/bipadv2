@@ -55,7 +55,7 @@ import { createConnectedRequestCoordinator, createRequestClient, methods } from 
 import { AppState } from "#types";
 import { englishToNepaliNumber } from "nepali-number";
 import eyeSolid from "#resources/icons/eye-solid.svg";
-import Reset from "#resources/icons/reset.svg";
+import Reset from "#resources/icons/resetme.svg";
 import ADToBS from "#utils/AdBSConverter/AdToBs";
 import BSToAD from "#utils/AdBSConverter/BsToAd";
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";

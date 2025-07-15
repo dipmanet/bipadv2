@@ -7,7 +7,7 @@ import { Link } from "@reach/router";
 import React, { useRef } from "react";
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import styles from "./styles.module.scss";
-import Reset from "../../../../resources/icons/reset.svg";
+import Reset from "../../../../resources/icons/resetme.svg";
 
 const SidebarLogo = ({
 	data,
