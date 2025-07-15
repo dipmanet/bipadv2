@@ -1,0 +1,31 @@
+@import '../../../stylesheets/utils';
+
+.formatted-text {
+    position: relative;
+    overflow: auto;
+
+    .area {
+        height: 100%;
+    }
+
+    .button-container {
+        @include transition-medium;
+        display: flex;
+        position: absolute;
+        right: var(--spacing-large);
+        bottom: var(--spacing-extra-large);
+        align-items: center;
+        flex-direction: column;
+        opacity: .1;
+
+        .format-button {
+            font-size: var(--font-size-extra-large);
+        }
+    }
+
+    &:hover {
+        .button-container {
+            opacity: 1;
+        }
+    }
+}

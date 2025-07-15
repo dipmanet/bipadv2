@@ -1,0 +1,25 @@
+.non-field-errors {
+    display: flex;
+    text-align: center;
+    color: var(--color-danger);
+
+    .error {
+        flex-basis: 100%;
+        padding: var(--spacing-small);
+
+        &.empty {
+            color: transparent;
+            user-select: none;
+        }
+
+        &.remove {
+            display: none;
+        }
+
+        &:not(:last-child) {
+            &::after {
+                content: ', ';
+            }
+        }
+    }
+}

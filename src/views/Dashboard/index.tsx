@@ -483,7 +483,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
 		return (
 			<>
-      <div>hello world</div>
+				<div>hello world</div>
 				<Loading pending={pending} />
 				<Map
 					alertList={alertList}
@@ -525,7 +525,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 							</div>
 							<HazardsLegend
 								filteredHazardTypes={filteredHazardTypes}
-                
 								className={styles.hazardLegend}
 								itemClassName={styles.legendItem}
 							/>

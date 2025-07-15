@@ -1,4 +1,4 @@
-import { currentStyle } from "../../src/vendor/react-store/utils/styles";
+import { currentStyle } from "#rscu/styles";
 import styleProperties from "./styleProperties";
 
 const convertValueToNumber = (value = "") => +value.substring(0, value.length - 2);

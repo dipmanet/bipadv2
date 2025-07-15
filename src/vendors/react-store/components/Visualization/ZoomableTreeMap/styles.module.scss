@@ -1,0 +1,41 @@
+
+.treemap {
+    display: flex;
+    flex: 1 1 auto;
+
+    rect {
+        cursor: pointer;
+    }
+
+    .grandparent {
+        cursor: pointer;
+
+        :hover {
+            fill: var(--color-viz-grey);
+        }
+
+        rect {
+            fill: var(--color-accent);
+        }
+    }
+
+    .child-label {
+        font-weight: var(--font-weight-normal);
+    }
+    .parent-label {
+        font-weight: var(--font-weight-bold);
+    }
+
+    .parent text{
+        font-size: var(--font-size-large);
+    }
+
+    .children rect.parent,
+    .children rect.child {
+        opacity: 1;
+    }
+
+    .children rect.parent {
+        fill-opacity: 0;
+    }
+}

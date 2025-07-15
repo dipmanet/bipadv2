@@ -1,0 +1,30 @@
+.dismissable-list-item {
+    display: flex;
+    overflow: hidden;
+
+    .list-item {
+        flex-grow: 1;
+    }
+
+    .actions {
+        display: flex;
+        flex-shrink: 0;
+        opacity: 0;
+
+        .dismiss-button {
+            padding: 0 var(--spacing-small);
+        }
+
+        .edit-button {
+            padding: 0 var(--spacing-small);
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background-accent-hint);
+
+        .actions {
+            opacity: 1;
+        }
+    }
+}

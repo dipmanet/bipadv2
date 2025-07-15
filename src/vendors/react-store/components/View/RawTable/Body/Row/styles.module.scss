@@ -1,0 +1,22 @@
+@import '../../../../../stylesheets/utils';
+
+.row {
+    @extend %background-alternating-row;
+    transition: var(--duration-transition-medium) background-color ease-in-out, var(--duration-transition-medium) color ease-in-out;
+
+    &.hoverable {
+        &:hover {
+            background-color: var(--color-background-hover);
+            color: var(--color-text);
+        }
+    }
+
+    &.highlighted {
+        background-color: var(--color-accent);
+        color: var(--color-text-on-accent);
+    }
+
+    &:hover {
+        background-color: var(--color-background-accent-hint);
+    }
+}

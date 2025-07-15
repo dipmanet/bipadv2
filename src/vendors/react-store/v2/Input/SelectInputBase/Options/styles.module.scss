@@ -1,0 +1,10 @@
+.options {
+    .list {
+        background-color: var(--color-foreground);
+        min-height: 56px;
+        max-height: 220px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        color: var(--color-text-on-foreground);
+    }
+}

@@ -1,0 +1,111 @@
+@import "../../../stylesheets/utils";
+@import "../../../stylesheets/input-base";
+@import "../../../stylesheets/input-border";
+
+:root {
+	--width-date-picker-container-min: 208px;
+	--width-spinner: 16px;
+	--width-date-input: 112px;
+}
+
+.date-picker-container {
+	min-width: var(--width-date-picker-container-min);
+}
+
+.date-input {
+	min-width: var(--width-date-input);
+
+	.input {
+		position: relative;
+
+		.units {
+			.day-unit,
+			.month-unit {
+				width: calc(2ch + var(--width-spinner));
+				font-family: var(--font-family-monospace);
+			}
+
+			.year-unit {
+				width: calc(4ch + var(--width-spinner));
+				font-family: var(--font-family-monospace);
+			}
+		}
+
+		.action-buttons {
+			@include transition-medium;
+			position: absolute;
+			right: 0;
+			// NOTE: Problem with var(--spacing-extra-small) * 2
+			//  Cannot use multiplication with libsass
+			// NOTE: Problem with -calc
+			// Need space between minus sign and calc
+			bottom: calc(
+				-1 * (var(--font-size-small) + var(--spacing-medium) + 2 * var(--spacing-extra-small))
+			);
+
+			opacity: 0;
+			z-index: 1111;
+			border: var(--width-separator-thin) solid var(--color-separator);
+			border-radius: 0 0 var(--radius-border-small) var(--radius-border-small);
+			background-color: var(--color-foreground);
+			padding: var(--spacing-extra-small);
+		}
+
+		&:hover {
+			.action-buttons {
+				opacity: 1;
+			}
+		}
+	}
+
+	&:not(.disabled) {
+		.input {
+			@extend %input-border;
+		}
+
+		&.focused {
+			.input {
+				border-bottom-color: var(--color-accent);
+			}
+		}
+
+		&.invalid {
+			.input {
+				border-bottom-color: var(--color-warning);
+			}
+		}
+
+		&.error {
+			.input {
+				border-bottom-color: var(--color-danger);
+			}
+		}
+	}
+
+	&.disabled,
+	&.readOnly {
+		.input {
+			border-bottom-color: var(--color-separator);
+
+			&:hover {
+				.action-buttons {
+					opacity: 0;
+					pointer-events: none;
+				}
+			}
+		}
+		.label {
+			color: var(--color-text-disabled);
+		}
+	}
+
+	&.disabled {
+		.input {
+			.day-unit,
+			.month-unit,
+			.year-unit {
+				color: var(--color-text-disabled);
+			}
+		}
+	}
+}

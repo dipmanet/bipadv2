@@ -1,0 +1,34 @@
+
+.recaptcha {
+    padding: var(--spacing-small) 0;
+
+    .g-recaptcha {
+        border: var(--width-separator-medium) solid transparent;
+
+        &.errored {
+            border-color: var(--color-danger);
+        }
+    }
+
+    %base {
+        margin: var(--spacing-extra-small) 0 0;
+        font-size: var(--font-size-extra-small);
+    }
+
+    /*
+    .hint {
+        @extend %base;
+        color: var(--color-text-label);
+    }
+    */
+
+    .error {
+        @extend %base;
+        color: var(--color-danger);
+    }
+
+    .empty {
+        @extend %base;
+        visibility: hidden;
+    }
+}

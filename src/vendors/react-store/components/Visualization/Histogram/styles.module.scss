@@ -1,0 +1,50 @@
+@import '../../../stylesheets/utils';
+
+.histogram {
+    .bar {
+        cursor: pointer;
+    }
+
+    .xaxis {
+        path {
+            stroke: var(--color-accent);
+            stroke-width: var(--width-separator-thin);
+        }
+    }
+
+    .yaxis {
+        path {
+            stroke: var(--color-accent);
+        }
+    }
+
+    .yaxis-grids {
+        line {
+            stroke-width: var(--width-separator-thin);
+            stroke: var(--color-separator);
+
+            // TODO: use variables
+            stroke-dasharray: 5, 5;
+        }
+
+        text {
+            visibility: hidden;
+        }
+    }
+}
+
+.tooltip {
+    @include shadow-medium;
+    display: block;
+    position: fixed;
+    z-index: 10;
+    background-color: var(--color-foreground);
+    padding: var(--spacing-small) var(--spacing-medium-alt);
+
+    // TOOD: user variable for animation duration
+    animation: fade-in .2s ease-in;
+
+    text-align: center;
+    color: var(--color-text);
+    pointer-events: none;
+}
