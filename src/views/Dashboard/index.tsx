@@ -19,6 +19,7 @@ import {
 import { pastDaysToDateRange, transformRegionToFilter } from "#utils/transformations";
 
 import { hazardTypesList } from "#utils/domain";
+
 import {
 	setAlertListActionDP,
 	setEventListAction,
@@ -337,16 +338,15 @@ class Dashboard extends React.PureComponent<Props, State> {
 		window.clearTimeout(this.eventTimeout);
 	}
 
-	private getInitialHazardList = async () => {
-		const apibase = import.meta.env.VITE_APP_API_SERVER_URL;
-		const url = `${apibase}/hazard/`;
-		console.log("test response", url);
-		await fetch(url).then((response) => {
-			const data = response.json();
-
-			console.log("test response3", data, response.body);
-			this.setState({ hazardTypes: data?.results });
-		});
+	private getInitialHazardList = () => {
+		const xmlHttp = new XMLHttpRequest();
+		const url = `${import.meta.env.VITE_APP_API_SERVER_URL}/hazard/`;
+		xmlHttp.open("GET", url, false); // false for synchronous request
+		xmlHttp.send(null);
+		const { responseText } = xmlHttp;
+		const hazardTypes = JSON.parse(responseText);
+		const { results } = hazardTypes;
+		this.setState({ hazardTypes: results });
 	};
 
 	private getAlertHazardTypesList = memoize(
@@ -482,8 +482,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 		const eventMapHoverAttributes = this.getEventMapHoverAttributes(hoveredEventId);
 
 		return (
-			<>
-				<div>hello world</div>
+			<React.Fragment>
 				<Loading pending={pending} />
 				<Map
 					alertList={alertList}
@@ -531,7 +530,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 						</>
 					}
 				/>
-			</>
+			</React.Fragment>
 		);
 	}
 }
