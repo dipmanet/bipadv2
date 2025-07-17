@@ -41,6 +41,8 @@
 	--sidebar-border: #267189;
 	--sidebar-ring: oklch(0.708 0 0);
 	--highlight: #f9fafb;
+
+	--color-text: #000;
 }
 
 .dark {
@@ -78,6 +80,7 @@
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.556 0 0);
 	--highlight: #f9fafb;
+	--color-text: #000;
 }
 
 @theme inline {

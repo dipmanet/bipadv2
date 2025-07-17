@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { _cs } from "@togglecorp/fujs";
 import { connect } from "react-redux";
 import { Translation } from "react-i18next";
@@ -8,7 +8,7 @@ import DrawIcon from "./icons/bbox.svg";
 import GlobeIcon from "./icons/latlng.svg";
 import NavigationIcon from "./icons/navigation.svg";
 import SearchIcon from "./icons/search.svg";
-import ReloadIcon from "./icons/resetme.svg";
+import ReloadIcon from "./icons/reset.svg";
 import FullScreenIcon from "./icons/fullscreen.svg";
 
 interface OwnProps {

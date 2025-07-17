@@ -1,84 +1,84 @@
-@import '~base-scss/base';
+@import "~base-scss/base";
 
 .multi-list-selection {
-    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+	padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
-    .header-container {
-        display: flex;
-        align-items: center;
-        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
+	.header-container {
+		display: flex;
+		align-items: center;
+		padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
 
-        .label {
-            flex-grow: 1;
-            padding: var(--spacing-extra-small) var(--spacing-medium);
-        }
+		.label {
+			flex-grow: 1;
+			padding: var(--spacing-extra-small) var(--spacing-medium);
+		}
 
-        .clear-button {
-            padding: 0;
-            padding: var(--spacing-extra-small) var(--spacing-medium);
-            color: var(--color-danger);
-            font-size: var(--font-size-small);
-        }
-    }
+		.clear-button {
+			padding: 0;
+			padding: var(--spacing-extra-small) var(--spacing-medium);
+			color: var(--color-danger);
+			font-size: var(--font-size-small);
+		}
+	}
 
-    .options {
-        padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
+	.options {
+		padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
 
-        .option {
-            display: flex;
-            align-items: center;
-            flex-grow: 0;
-            cursor: pointer;
-            padding: calc(var(--spacing-extra-small-alt) - var(--spacing-extra-small)) 0;
+		.option {
+			display: flex;
+			align-items: center;
+			flex-grow: 0;
+			cursor: pointer;
+			padding: calc(var(--spacing-extra-small-alt) - var(--spacing-extra-small)) 0;
 
-            .icon {
-                display: block;
-                transition: $duration-transition-medium all ease-in-out;
-                opacity: .5;
-                margin: var(--spacing-extra-small) var(--spacing-small);
-                width: 16px;
-                height: 16px;
-                filter: grayscale(77%);
+			.icon {
+				display: block;
+				transition: $duration-transition-medium all ease-in-out;
+				opacity: 0.5;
+				margin: var(--spacing-extra-small) var(--spacing-small);
+				width: 16px;
+				height: 16px;
+				filter: grayscale(77%);
 
-                path {
-                    fill: $color-text;
-                }
-            }
+				path {
+					fill: $color-text;
+				}
+			}
 
-            .title {
-                transition: $duration-transition-medium all ease-in-out;
-                text-transform: none;
-                color: var(--color-text-light);
-                font-size: var(--font-size-small);
-                padding: var(--spacing-extra-small) var(--spacing-small);
-            }
+			.title {
+				transition: $duration-transition-medium all ease-in-out;
+				text-transform: none;
+				color: var(--color-text-light);
+				font-size: var(--font-size-small);
+				padding: var(--spacing-extra-small) var(--spacing-small);
+			}
 
-            &:hover {
-                .icon {
-                    opacity: 1;
-                }
+			&:hover {
+				.icon {
+					opacity: 1;
+				}
 
-                .title {
-                    color: $color-text;
-                }
-            }
+				.title {
+					color: $color-text;
+				}
+			}
 
-            &.active {
-                color: var(--color-accent);
+			&.active {
+				color: var(--color-accent);
 
-                .icon {
-                    opacity: 1;
-                    filter: none;
+				.icon {
+					opacity: 1;
+					filter: none;
 
-                    path {
-                        fill: currentColor;
-                    }
-                }
+					path {
+						fill: currentColor;
+					}
+				}
 
-                .title {
-                    color: currentColor;
-                }
-            }
-        }
-    }
+				.title {
+					color: currentColor;
+				}
+			}
+		}
+	}
 }

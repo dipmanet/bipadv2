@@ -9,7 +9,7 @@ import imagePaths from "../../../constants/imagePaths";
 import RiskInfoIcon from "#resources/icons/RiskInfo.svg";
 import EarthquakeChart from "#resources/icons/Earthquake-Charts.svg";
 
-import "./styles.module.scss";
+import styles from "./styles.module.scss";
 
 const iconMapping = {};
 export function addIcon(type, name, value) {

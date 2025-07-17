@@ -21,7 +21,7 @@ import MapContainer from "#re-map/MapContainer";
 import MapOrder from "#re-map/MapOrder";
 import { getLayerName } from "#re-map/utils";
 import Icon from "#rscg/Icon";
-import { setStyleProperty } from "#rsu/styles";
+import { setStyleProperty } from "#rscu/styles";
 import Responsive from "#rscg/Responsive";
 import DangerButton from "#rsca/Button/DangerButton";
 import { AppState } from "#store/types";

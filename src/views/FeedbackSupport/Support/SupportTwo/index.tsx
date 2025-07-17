@@ -11,7 +11,7 @@ import Icon from "#rscg/Icon";
 import Modal from "#rscv/Modal";
 import ModalBody from "#rscv/Modal/Body";
 import DangerButton from "#rsca/Button/DangerButton";
-import Button from "../../../../vendor/react-store/v2/Action/Button";
+import Button from "../../../../vendors/react-store/v2/Action/Button";
 import styles from "./styles.module.scss";
 
 const FeedbackTwo = (props) => {
