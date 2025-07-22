@@ -7,7 +7,7 @@
 /* eslint-disable react/jsx-indent */
 
 import React from "react";
-import produce from "immer";
+import { produce } from "immer";
 import { connect } from "react-redux";
 import memoize from "memoize-one";
 import { _cs, compareDate, compareString, compareBoolean, listToMap } from "@togglecorp/fujs";

@@ -1,6 +1,6 @@
 import React from "react";
 import memoize from "memoize-one";
-import produce from "immer";
+import { produce } from "immer";
 import { _cs } from "@togglecorp/fujs";
 import { connect } from "react-redux";
 

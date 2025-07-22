@@ -108,3 +108,8 @@ body {
 	height: 100%;
 	animation: slide-in dimens.$duration-slow ease forwards;
 }
+
+$duration-transition-medium: 1s;
+$color-text: colors.$color-text;
+$spacing-extra-small: dimens.$spacing-extra-small;
+$font-weight-bold: dimens.$font-weight-bold;

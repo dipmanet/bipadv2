@@ -11,7 +11,7 @@ import { _cs, bound } from "@togglecorp/fujs";
 import memoize from "memoize-one";
 import { bbox, point, buffer } from "@turf/turf";
 import mapboxgl from "mapbox-gl";
-import Joyride, { CallBackProps, STATUS } from "react-joyride";
+import { CallBackProps, STATUS } from "react-joyride";
 import Cookies from "js-cookie";
 
 import i18n from "i18next";
@@ -21,7 +21,7 @@ import MapContainer from "#re-map/MapContainer";
 import MapOrder from "#re-map/MapOrder";
 import { getLayerName } from "#re-map/utils";
 import Icon from "#rscg/Icon";
-import { setStyleProperty } from "#rsu/styles";
+import { setStyleProperty } from "#rscu/styles";
 import Responsive from "#rscg/Responsive";
 import DangerButton from "#rsca/Button/DangerButton";
 import { AppState } from "#store/types";
@@ -142,7 +142,7 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 // MULTIPLEXER
 
-const domain = import.meta.env.VITE_APP_DOMAIN;
+const domain = import.meta.env.REACT_APP_DOMAIN;
 
 interface State {
 	leftContent?: React.ReactNode;

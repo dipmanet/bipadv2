@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import produce from "immer";
+import { produce } from "immer";
 import { isDefined, _cs } from "@togglecorp/fujs";
 import Loader from "react-loader";
 import { sum } from "#utils/common";

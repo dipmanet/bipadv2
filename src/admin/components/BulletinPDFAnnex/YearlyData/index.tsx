@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import produce from "immer";
+import { produce } from "immer";
 import { Translation } from "react-i18next";
 
 import memoize from "memoize-one";

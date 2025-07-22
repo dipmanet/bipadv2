@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import produce from "immer";
+import { produce } from "immer";
 import { _cs } from "@togglecorp/fujs";
 
 import Faram, { requiredCondition } from "@togglecorp/faram";

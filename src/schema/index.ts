@@ -30,9 +30,9 @@ const dict = new Dict({ warning });
 	...userDefinedSchemas,
 	...dashboardSchemas,
 	...commonSchemas,
-	...incidentSchemas,
+	// ...incidentSchemas,
 	...realtimeSchemas,
 	...responseSchemas,
-].forEach((schema) => dict.put(schema.doc.name, schema));
+]?.forEach((schema) => dict?.put(schema?.doc?.name ?? "n/a", schema));
 
 export default dict;

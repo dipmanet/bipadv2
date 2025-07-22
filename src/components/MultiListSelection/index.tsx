@@ -10,8 +10,8 @@ import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import styles from "./styles.module.scss";
 
 const propTypes = {
-	options: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-	value: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+	options: PropTypes.array,
+	value: PropTypes.array,
 	onChange: PropTypes.func,
 	className: PropTypes.string,
 	showLabel: PropTypes.bool,

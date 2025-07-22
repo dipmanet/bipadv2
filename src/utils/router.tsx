@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
-import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound, Vizrisk } from "#lib/routes";
+import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound, Vizrisk } from "#utils/routes";
 
 export const router = createBrowserRouter([
 	{

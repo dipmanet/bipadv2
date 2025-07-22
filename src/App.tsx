@@ -1,46 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { Store } from "redux";
 import { Provider } from "react-redux";
 import { persistStore, Persistor } from "redux-persist";
 
 import { styleProperties } from "#constants";
 import ReduxContext from "#components/ReduxContext";
 
-import store from "../src/store";
-import { AppState } from "../src/store/types";
+import { addIcon } from "#rscg/Icon";
+import { iconNames } from "#constants";
+
+import store from "#store";
+import { AppState } from "#store/types";
 import { initializeStyles, setStyleProperties } from "#rscu/styles";
+
+import DataLoader from "#components/DataLoader";
 import { RouterProvider } from "react-router-dom";
-import { router } from "../src/lib/router";
+import { router } from "#utils/router";
 
-import { Store } from "redux";
+interface State {
+	rehydrated: boolean;
+}
+interface Props {}
 
-const Main: React.FC = () => {
-	const [rehydrated, setRehydrated] = useState(false);
+export default class Root extends React.Component<Props, State> {
+	private store: Store<AppState> = store as Store<AppState>;
+	private persistor!: Persistor;
 
-	const storeRef = useRef<Store<AppState>>(store as Store<AppState>);
-	const persistorRef = useRef<Persistor>(null);
+	public constructor(props: Props) {
+		super(props);
+		this.state = { rehydrated: false };
 
-	useEffect(() => {
+		// Initialize global styles and theme
 		initializeStyles();
 		setStyleProperties(styleProperties);
 
-		// Add icons
-
-		persistorRef.current = persistStore(storeRef.current, undefined, () => {
-			setRehydrated(true);
+		// Load all icons
+		Object.entries(iconNames).forEach(([key, value]) => {
+			addIcon("font", key, value);
 		});
-	}, []);
-
-	if (!rehydrated) {
-		return <div />;
 	}
 
-	return (
-		<Provider store={storeRef.current}>
-			<ReduxContext.Provider value={{ persistor: persistorRef.current! }}>
-				<RouterProvider router={router} />
-			</ReduxContext.Provider>
-		</Provider>
-	);
-};
+	componentDidMount() {
+		this.persistor = persistStore(this.store, undefined, () => {
+			this.setState({ rehydrated: true });
+		});
+	}
 
-export default Main;
+	public render() {
+		if (!this.state.rehydrated) {
+			// Optional: Replace with a loader or splash screen if needed
+			return <div />;
+		}
+
+		return (
+			<Provider store={this.store}>
+				<ReduxContext.Provider value={{ persistor: this.persistor }}>
+					{/* <DataLoader> */}
+					<RouterProvider router={router} />
+					{/* </DataLoader> */}
+				</ReduxContext.Provider>
+			</Provider>
+		);
+	}
+}

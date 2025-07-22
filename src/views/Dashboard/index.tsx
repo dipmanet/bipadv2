@@ -1,5 +1,5 @@
 import React from "react";
-import Redux from "redux";
+import Redux, { compose } from "redux";
 import { connect } from "react-redux";
 import memoize from "memoize-one";
 import { _cs, Obj } from "@togglecorp/fujs";
@@ -189,6 +189,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 			ordering: "-started_on",
 		}),
 		onSuccess: ({ response, props: { setAlertList }, params }) => {
+			console.log("test response", response);
 			interface Response {
 				results: PageTypes.Alert[];
 			}
@@ -302,13 +303,17 @@ class Dashboard extends React.PureComponent<Props, State> {
 		};
 
 		const {
-			requests: { alertsRequest },
+			requests: { alertsRequest, eventsRequest },
 		} = this.props;
 
 		alertsRequest.setDefaultParams({
 			triggerAlertRequest: this.alertPoll,
 			triggerEventRequest: this.eventPoll,
 		});
+		alertsRequest.do();
+		// eventsRequest.setDefaultParams({
+		// 	triggerAlertRequest: this.eventPoll,
+		// });
 	}
 
 	public componentDidMount(): void {
@@ -340,7 +345,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 	private getInitialHazardList = async () => {
 		const apibase = import.meta.env.VITE_APP_API_SERVER_URL;
 		const url = `${apibase}/hazard/`;
-		console.log("test response", url);
 		await fetch(url).then((response) => {
 			const data = response.json();
 
@@ -536,7 +540,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 	}
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(createConnectedRequestCoordinator<ReduxProps>()(createRequestClient(requests)(Dashboard)));
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	createConnectedRequestCoordinator<ReduxProps>(),
+	createRequestClient(requests)
+)(Dashboard);

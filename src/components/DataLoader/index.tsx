@@ -1,6 +1,6 @@
 import React from "react";
-import Redux from "redux";
 import { connect } from "react-redux";
+import { compose, type Dispatch } from "redux";
 
 import { AppState } from "#store/types";
 import * as PageTypes from "#store/atom/page/types";
@@ -24,16 +24,14 @@ import {
 	SetAdminMenuAction,
 } from "#actionCreators";
 import { mapStyleSelector, authStateSelector } from "#selectors";
-
 import { getAuthState } from "#utils/session";
-
 import { ModelEnum } from "#types";
-import Multiplexer from "../Multiplexer";
-import "./styles.module.scss";
 
 interface State {}
 interface Params {}
-interface OwnProps {}
+interface OwnProps {
+	children?: React.ReactNode; // Allow children to be passed
+}
 interface PropsFromState {
 	mapStyle: string;
 	authState: AuthState;
@@ -45,12 +43,23 @@ interface PropsFromDispatch {
 	setWards: typeof setWardsAction;
 	setHazardTypes: typeof setHazardTypesAction;
 	setEnumOptions: typeof setEnumOptionsAction;
-	// setEventTypes: typeof setEventTypesAction;
 	setAuth: typeof setAuthAction;
 	setUserDetail: typeof setUserDetailAction;
 	setAdminMenu: typeof SetAdminMenuAction;
 }
-type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
+interface RequestProps {
+	requests: {
+		meRequest: { pending: boolean; responseError?: any; do: () => void };
+		provinceListRequest: { pending: boolean; responseError?: any; do: () => void };
+		districtListRequest: { pending: boolean; responseError?: any; do: () => void };
+		municipalityListRequest: { pending: boolean; responseError?: any; do: () => void };
+		wardListRequest: { pending: boolean; responseError?: any; do: () => void };
+		hazardTypesRequest: { pending: boolean; responseError?: any; do: () => void };
+		enumOptionsGetRequest: { pending: boolean; responseError?: any; do: () => void };
+		getMenu: { pending: boolean; responseError?: any; do: () => void };
+	};
+}
+type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch & RequestProps;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
@@ -58,7 +67,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 	authState: authStateSelector(state),
 });
 
-const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 	setProvinces: (params) => dispatch(setProvincesAction(params)),
 	setDistricts: (params) => dispatch(setDistrictsAction(params)),
 	setMunicipalities: (params) => dispatch(setMunicipalitiesAction(params)),
@@ -66,7 +75,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 	setHazardTypes: (params) => dispatch(setHazardTypesAction(params)),
 	setEnumOptions: (params) => dispatch(setEnumOptionsAction(params)),
 	setAuth: (params) => dispatch(setAuthAction(params)),
-	// setEventTypes: params => dispatch(setEventTypesAction(params)),
 	setUserDetail: (params) => dispatch(setUserDetailAction(params)),
 	setAdminMenu: (params) => dispatch(SetAdminMenuAction(params)),
 });
@@ -77,10 +85,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 		method: methods.GET,
 		onSuccess: ({ response, props }) => {
 			const { setUserDetail } = props;
+			console.log("meRequest Success:", response); // Debug
 			setUserDetail(response as User);
 		},
 		onMount: () => {
 			const authState = getAuthState();
+			console.log("meRequest onMount - Auth State:", authState); // Debug
 			return authState.authenticated;
 		},
 	},
@@ -92,6 +102,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 				results: PageTypes.Province[];
 			}
 			const { results: provinces = [] } = response as Response;
+			console.log("provinceListRequest Success:", provinces); // Debug
 			setProvinces({ provinces });
 		},
 		extras: {
@@ -107,6 +118,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 				results: PageTypes.District[];
 			}
 			const { results: districts = [] } = response as Response;
+			console.log("districtListRequest Success:", districts); // Debug
 			setDistricts({ districts });
 		},
 		extras: {
@@ -122,6 +134,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 				results: PageTypes.Municipality[];
 			}
 			const { results: municipalities = [] } = response as Response;
+			console.log("municipalityListRequest Success:", municipalities); // Debug
 			setMunicipalities({ municipalities });
 		},
 		extras: {
@@ -140,6 +153,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 				results: PageTypes.Ward[];
 			}
 			const { results: wards = [] } = response as Response;
+			console.log("wardListRequest Success:", wards); // Debug
 			setWards({ wards });
 		},
 		extras: {
@@ -155,6 +169,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 				results: PageTypes.HazardType[];
 			}
 			const { results: hazardTypes = [] } = response as Response;
+			console.log("hazardTypesRequest Success:", hazardTypes); // Debug
 			setHazardTypes({ hazardTypes });
 		},
 		extras: {
@@ -168,47 +183,66 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 		onMount: true,
 		onSuccess: ({ response, props: { setEnumOptions } }) => {
 			const enumList: ModelEnum[] = response as ModelEnum[];
+			console.log("enumOptionsGetRequest Success:", enumList); // Debug
 			setEnumOptions({ enumList });
 		},
+		// elder: true,
 	},
 	getMenu: {
 		url: "/adminportal-menu/",
 		method: methods.GET,
 		onMount: true,
 		onSuccess: ({ response, props: { setAdminMenu } }) => {
+			console.log("getMenu Success:", response.results); // Debug
 			setAdminMenu(response.results);
 		},
 	},
-	/*
-       eventTypesRequest: {
-       url: '/event/',
-       method: methods.GET,
-       onSuccess: ({ response, props: { setEventTypes } }) => {
-       interface Response { results: PageTypes.EventType[] }
-       const { results: eventTypes = [] } = response as Response;
-       setEventTypes({ eventTypes });
-       },
-       onMount: true,
-       },
-     */
 };
 
-// NOTE: BrowserRouter is acting weird so not using React.PureComponent
-/* Loads required info from server */
-// eslint-disable-next-line react/prefer-stateless-function
 class App extends React.Component<Props, State> {
 	public constructor(props: Props) {
 		super(props);
 
 		const authState = getAuthState();
 		const { setAuth } = this.props;
-
+		console.log("Constructor - Auth State:", authState); // Debug
 		setAuth(authState);
+	}
+
+	public componentDidMount() {
+		// Fallback to manually trigger requests if onMount is not working
+		const { requests } = this.props;
+		console.log("componentDidMount - Request Objects:", requests); // Debug
+		if (requests.meRequest && requests.meRequest.do && getAuthState().authenticated) {
+			requests.meRequest.do();
+		}
+		if (requests.provinceListRequest && requests.provinceListRequest.do) {
+			requests.provinceListRequest.do();
+		}
+		if (requests.districtListRequest && requests.districtListRequest.do) {
+			requests.districtListRequest.do();
+		}
+		if (requests.municipalityListRequest && requests.municipalityListRequest.do) {
+			requests.municipalityListRequest.do();
+		}
+		if (requests.wardListRequest && requests.wardListRequest.do) {
+			requests.wardListRequest.do();
+		}
+		if (requests.hazardTypesRequest && requests.hazardTypesRequest.do) {
+			requests.hazardTypesRequest.do();
+		}
+		if (requests.enumOptionsGetRequest && requests.enumOptionsGetRequest.do) {
+			requests.enumOptionsGetRequest.do();
+		}
+		if (requests.getMenu && requests.getMenu.do) {
+			requests.getMenu.do();
+		}
 	}
 
 	public render() {
 		const {
 			requests: {
+				meRequest: { pending: mePending, responseError: meResponseError },
 				provinceListRequest: { pending: provincePending, responseError: provinceResponseError },
 				districtListRequest: { pending: districtPending, responseError: districtResponseError },
 				municipalityListRequest: {
@@ -217,32 +251,59 @@ class App extends React.Component<Props, State> {
 				},
 				wardListRequest: { pending: wardListPending, responseError: wardListResponseError },
 				hazardTypesRequest: { pending: hazardTypePending, responseError: hazardTypeResponseError },
-				meRequest: { pending: mePending, responseError: meResponseError },
+				enumOptionsGetRequest: {
+					pending: enumOptionsPending,
+					responseError: enumOptionsResponseError,
+				},
+				getMenu: { pending: menuPending, responseError: menuResponseError },
 			},
 			mapStyle,
 		} = this.props;
 
 		const pending =
+			mePending ||
 			provincePending ||
 			districtPending ||
 			municipalityPending ||
 			wardListPending ||
 			hazardTypePending ||
-			mePending;
+			enumOptionsPending ||
+			menuPending;
 
 		const hasError =
+			!!meResponseError ||
 			!!provinceResponseError ||
 			!!districtResponseError ||
 			!!municipalityResponseError ||
 			!!wardListResponseError ||
 			!!hazardTypeResponseError ||
-			!!meResponseError;
+			!!enumOptionsResponseError ||
+			!!menuResponseError;
 
-		return <Multiplexer pending={pending} hasError={hasError} mapStyle={mapStyle} />;
+		// Debug request states
+		console.log("Render - Request States:", {
+			me: { pending: mePending, error: meResponseError },
+			province: { pending: provincePending, error: provinceResponseError },
+			district: { pending: districtPending, error: districtResponseError },
+			municipality: { pending: municipalityPending, error: municipalityResponseError },
+			ward: { pending: wardListPending, error: wardListResponseError },
+			hazard: { pending: hazardTypePending, error: hazardTypeResponseError },
+			enumOptions: { pending: enumOptionsPending, error: enumOptionsResponseError },
+			menu: { pending: menuPending, error: menuResponseError },
+		});
+
+		return (
+			<div>
+				<div>Pending: {pending.toString()}</div>
+				<div>Has Error: {hasError.toString()}</div>
+				{!pending && !hasError && this.props.children}
+			</div>
+		);
 	}
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(createConnectedRequestCoordinator<ReduxProps>()(createRequestClient(requests)(App)));
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	createConnectedRequestCoordinator<ReduxProps>(),
+	createRequestClient(requests)
+)(App);

@@ -2,25 +2,23 @@
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
-import produce from 'immer';
+import { produce } from "immer";
 
-import * as Type from './types';
+import * as Type from "./types";
 
-import initialState from './initialState';
+import initialState from "./initialState";
 
 // Covid
-export const SetIncidentPageAction = incidentPage => ({
+export const SetIncidentPageAction = (incidentPage) => ({
 	type: Type.PageType.SET_INCIDENT_PAGE,
 	incidentPage,
 });
 
 // Covid
 const setIncidentPage = (state: Type.IncidentState, action: Type.SetIncidentPage) => {
-	const { incidentPage: {
-		incidentTableData,
-		incidentDataCount,
-		incidentFormEditData,
-	} } = action;
+	const {
+		incidentPage: { incidentTableData, incidentDataCount, incidentFormEditData },
+	} = action;
 	const newState = produce(state, (deferedState) => {
 		/* eslint-disable no-param-reassign */
 
@@ -39,7 +37,7 @@ const setIncidentPage = (state: Type.IncidentState, action: Type.SetIncidentPage
 
 export default function routeReducer(
 	state = initialState,
-	action: Type.PageActionTypes,
+	action: Type.PageActionTypes
 ): Type.IncidentState {
 	switch (action.type) {
 		case Type.PageType.SET_INCIDENT_PAGE:

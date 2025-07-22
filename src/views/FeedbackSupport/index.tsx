@@ -5,14 +5,14 @@
 /* eslint-disable react/prop-types */
 
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { navigate } from "@reach/router";
 import { _cs } from "@togglecorp/fujs";
 import Modal from "#rscv/Modal";
 import ModalHeader from "#rscv/Modal/Header";
 import ModalBody from "#rscv/Modal/Body";
 import DangerButton from "#rsca/Button/DangerButton";
-import Button from "../../vendor/react-store/v2/Action/Button";
+import Button from "../../vendors/react-store/v2/Action/Button";
 import styles from "./styles.module.scss";
 import Feedback from "./Feedback";
 import Support from "./Support";

@@ -13,7 +13,7 @@ import ModalBody from "#rscv/Modal/Body";
 import DangerButton from "#rsca/Button/DangerButton";
 import DownloadButton from "#components/DownloadButton";
 import { convertDateAccToLanguage } from "#utils/common";
-import Spinner from "src/vendor/react-store/v2/View/Spinner";
+import Spinner from "s../vendors/react-store/v2/View/Spinner";
 import { createRequestClient, methods } from "@togglecorp/react-rest-request";
 import { createConnectedRequestCoordinator } from "#request";
 import { compose } from "redux";
@@ -137,11 +137,7 @@ const DataTable = ({
 				);
 				const [title, valueOfTitle] = titleValue[0];
 				const result = individualArray.reduce(
-					(r, o) => (
-						Object.entries(o)
-						.forEach(([k, v]) => (r[k] = (r[k] || 0) + v)),
-						r
-					),
+					(r, o) => (Object.entries(o).forEach(([k, v]) => (r[k] = (r[k] || 0) + v)), r),
 					{}
 				);
 				result[title] = valueOfTitle;
