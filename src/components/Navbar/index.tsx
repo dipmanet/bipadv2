@@ -32,15 +32,13 @@ import SituationReport from "#components/SituationReportModal";
 import Relief from "#components/ReliefModal";
 import FeedbackSupport from "#views/FeedbackSupport";
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
-import ButtonGroupLogo from "#resources/icons/sidebarGroupButtons.svg";
+import ButtonGroupLogo from "#resources/icons/sidebarGroupButtons.svg?react";
 import PageContext from "#components/PageContext";
 import ReportIncidentIcon from "#resources/icons/reportIncident.svg";
 import PalikaReport from "#views/PalikaReport";
 import MenuItem from "./MenuItem";
 import styles from "./styles.module.scss";
 import GroupMenuContainer from "./GroupMenuContainer";
-
-const pages = routeSettings.filter((setting) => !!setting.navbar) as Menu[];
 
 interface Menu {
 	title: string;
@@ -50,27 +48,27 @@ interface Menu {
 	disabled: boolean;
 	id: string;
 }
-const GroupMenuListContainer = ({
-	title,
-	className,
-	onClick,
-	iconName,
-	disabled,
-	id,
-	image,
-	handleActiveGroupButton,
-	children,
-	disableOutsideDivClick,
-}: {
+
+const pages = routeSettings.filter((setting) => !!setting.navbar) as Menu[];
+
+interface GroupMenuListContainerProps {
 	title: string;
 	className?: string;
-	handleActiveGroupButton: () => void;
-	onClick: () => void;
-	iconName?: string;
+	handleActiveGroupButton: (active: boolean) => void;
 	disabled?: boolean;
 	id: string;
 	image?: boolean;
-	children: JSX.Element;
+	children: React.ReactNode;
+	disableOutsideDivClick?: boolean;
+}
+
+const GroupMenuListContainer: React.FC<GroupMenuListContainerProps> = ({
+	title,
+	className,
+	id,
+	handleActiveGroupButton,
+	children,
+	disableOutsideDivClick,
 }) => {
 	const [showInfo1, setShowInfo1] = useState<boolean>(false);
 	useEffect(() => {
@@ -93,19 +91,16 @@ const GroupMenuListContainer = ({
 					}}
 					title={title}
 					id={id}>
-					{image ? (
-						<ScalableVectorGraphics className={styles.infoIconMax} src={iconName} />
-					) : (
-						<Icon className={styles.icon} name={iconName} />
-					)}
-
+					<ButtonGroupLogo />
 					<div className={styles.title}>{title}</div>
 				</div>
 
 				<GroupMenuContainer
 					show={showInfo1}
 					onClickOutside={() => {
-						!disableOutsideDivClick ? setShowInfo1(false) : "";
+						if (!disableOutsideDivClick) {
+							setShowInfo1(false);
+						}
 					}}>
 					{children}
 				</GroupMenuContainer>
@@ -114,7 +109,18 @@ const GroupMenuListContainer = ({
 	);
 };
 
-const MenuItemLikeButton = ({
+interface MenuItemLikeButtonProps {
+	title: string;
+	className?: string;
+	onClick: () => void;
+	iconName?: string;
+	disabled?: boolean;
+	id: string;
+	image?: boolean;
+	onDisableClick?: () => void;
+}
+
+const MenuItemLikeButton: React.FC<MenuItemLikeButtonProps> = ({
 	title,
 	className,
 	onClick,
@@ -123,14 +129,6 @@ const MenuItemLikeButton = ({
 	id,
 	image,
 	onDisableClick,
-}: {
-	title: string;
-	className?: string;
-	onClick: () => void;
-	iconName?: string;
-	disabled?: boolean;
-	id: string;
-	image?: boolean;
 }) => (
 	<div
 		role="presentation"
@@ -139,7 +137,7 @@ const MenuItemLikeButton = ({
 			!disabled
 				? () => {
 						onClick();
-						onDisableClick();
+						onDisableClick?.();
 				  }
 				: undefined
 		}
@@ -162,15 +160,7 @@ const ReportIncidentButton = ({
 	disabled,
 	id,
 	image,
-}: {
-	title: string;
-	className?: string;
-	onClick: () => void;
-	iconName?: string;
-	disabled?: boolean;
-	id: string;
-	image?: boolean;
-}) => (
+}: MenuItemLikeButtonProps) => (
 	<div
 		role="presentation"
 		className={_cs(styles.menuItemLikeButton, className)}
@@ -181,14 +171,10 @@ const ReportIncidentButton = ({
 
 		{image ? (
 			<div className={styles.incidentButtonImagePart}>
-				{" "}
 				<ScalableVectorGraphics className={styles.infoIconMax} src={iconName} />
 			</div>
 		) : (
-			<div>
-				{" "}
-				<Icon className={styles.icon} name={iconName} />
-			</div>
+			<Icon className={styles.icon} name={iconName} />
 		)}
 	</div>
 );
@@ -334,8 +320,7 @@ class Navbar extends React.PureComponent<Props, State> {
 								: styles.buttomGroup
 						}
 						title=""
-						iconName={ButtonGroupLogo}
-						image
+						id="group-menu-list"
 						handleActiveGroupButton={this.handleActiveGroupButton}
 						disableOutsideDivClick={disableOutsideDivClick}>
 						{/* <Translation>
@@ -563,6 +548,7 @@ class Navbar extends React.PureComponent<Props, State> {
 								<MenuItemLikeButton
 									className={styles.logoutButton}
 									title={t("Admin")}
+									id="admin"
 									iconName="user"
 									onClick={gotoadmin}
 									disabled={logoutRequest.pending}
@@ -577,6 +563,7 @@ class Navbar extends React.PureComponent<Props, State> {
 								<MenuItemLikeButton
 									className={styles.logoutButton}
 									title={t("Logout")}
+									id="logout"
 									iconName="logout"
 									onClick={logoutRequest.do}
 									disabled={logoutRequest.pending}
