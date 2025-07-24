@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from "react";
-import Switch from "react-input-switch";
+import CustomSwitch from "#components/Common/CustomSwitch";
 import { _cs } from "@togglecorp/fujs";
 import Icon from "#rscg/Icon";
 import styles from "./styles.module.scss";
@@ -67,12 +66,10 @@ const SwitchView = (props: Props) => {
 	return (
 		<div className={styles.lists}>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={education}
+					value={education ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("education", value);
 					}}
@@ -80,12 +77,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Education </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={health}
+					value={health ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("health", value);
 					}}
@@ -93,12 +88,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Health </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={finance}
+					value={finance ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("finance", value);
 					}}
@@ -106,12 +99,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Finance </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={governance}
+					value={governance ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("governance", value);
 					}}
@@ -119,12 +110,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Governance </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={hotelandrestaurant}
+					value={hotelandrestaurant ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("hotelandrestaurant", value);
 					}}
@@ -132,12 +121,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Hotel and Restaurant </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={cultural}
+					value={cultural ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("cultural", value);
 					}}
@@ -145,12 +132,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Cultural </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={industry}
+					value={industry ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("industry", value);
 					}}
@@ -158,12 +143,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Industry </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={communication}
+					value={communication ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("communication", value);
 					}}
@@ -172,11 +155,10 @@ const SwitchView = (props: Props) => {
 			</div>
 			<div className={styles.listItemOpen}>
 				<div className={styles.switchWrap}>
-					<Switch
+					<CustomSwitch
 						className={styles.switch}
-						on
-						off={false}
-						value={openspace}
+						disabled={disabled}
+						value={openspace ?? false}
 						onChange={(value: boolean) => {
 							handleToggleClick("openspace", value);
 						}}
@@ -201,11 +183,10 @@ const SwitchView = (props: Props) => {
 			</div>
 			<div className={styles.listItemOpen}>
 				<div className={styles.switchWrap}>
-					<Switch
+					<CustomSwitch
 						className={styles.switch}
-						on
-						off={false}
-						value={communityspace}
+						disabled={disabled}
+						value={communityspace ?? false}
 						onChange={(value: boolean) => {
 							handleToggleClick("communityspace", value);
 						}}
@@ -229,12 +210,10 @@ const SwitchView = (props: Props) => {
 				</div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={fireengine}
+					value={fireengine ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("fireengine", value);
 					}}
@@ -242,12 +221,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Fire Engine </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={helipad}
+					value={helipad ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("helipad", value);
 					}}
@@ -255,12 +232,10 @@ const SwitchView = (props: Props) => {
 				<div className={styles.listTitle}> Helipad </div>
 			</div>
 			<div className={styles.listItem}>
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
 					disabled={disabled}
-					on
-					off={false}
-					value={evacuationcentre}
+					value={evacuationcentre ?? false}
 					onChange={(value: boolean) => {
 						handleToggleClick("evacuationcentre", value);
 					}}

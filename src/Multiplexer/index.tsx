@@ -191,6 +191,7 @@ interface PropsFromState {
 	provinces: Province[];
 	municipalities: Municipality[];
 	filters: FiltersElement;
+	// language: { language: string };
 	// hazardList: HazardType[];
 }
 
@@ -1817,9 +1818,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 			provinces,
 			districts,
 			municipalities,
-			// hazardList,
-			run,
-			closeWalkThroughHomepage,
 			language: { language },
 		} = this.props;
 
@@ -2211,7 +2209,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
-export default connect(
+const ConnectedMultipleser = connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(
@@ -2219,3 +2217,5 @@ export default connect(
 		createRequestClient(requests)(Responsive(Multiplexer))
 	)
 );
+
+export default ConnectedMultipleser;
