@@ -142,7 +142,7 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 // MULTIPLEXER
 
-const domain = import.meta.env.REACT_APP_DOMAIN;
+const domain = import.meta.env.VITE_APP_DOMAIN;
 
 interface State {
 	leftContent?: React.ReactNode;
@@ -2209,7 +2209,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
-const ConnectedMultipleser = connect(
+export default connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(
@@ -2217,5 +2217,3 @@ const ConnectedMultipleser = connect(
 		createRequestClient(requests)(Responsive(Multiplexer))
 	)
 );
-
-export default ConnectedMultipleser;
