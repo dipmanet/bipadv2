@@ -51,24 +51,22 @@ interface Menu {
 
 const pages = routeSettings.filter((setting) => !!setting.navbar) as Menu[];
 
-interface GroupMenuListContainerProps {
-	title: string;
-	className?: string;
-	handleActiveGroupButton: (active: boolean) => void;
-	disabled?: boolean;
-	id: string;
-	image?: boolean;
-	children: React.ReactNode;
-	disableOutsideDivClick?: boolean;
-}
-
-const GroupMenuListContainer: React.FC<GroupMenuListContainerProps> = ({
+const GroupMenuListContainer = ({
 	title,
 	className,
 	id,
 	handleActiveGroupButton,
 	children,
 	disableOutsideDivClick,
+}: {
+	title: string;
+	className?: string;
+	handleActiveGroupButton: (active: boolean) => void;
+	disabled?: boolean;
+	id: string;
+	image?: boolean;
+	children: React.JSX.Element;
+	disableOutsideDivClick?: boolean;
 }) => {
 	const [showInfo1, setShowInfo1] = useState<boolean>(false);
 	useEffect(() => {
@@ -109,18 +107,7 @@ const GroupMenuListContainer: React.FC<GroupMenuListContainerProps> = ({
 	);
 };
 
-interface MenuItemLikeButtonProps {
-	title: string;
-	className?: string;
-	onClick: () => void;
-	iconName?: string;
-	disabled?: boolean;
-	id: string;
-	image?: boolean;
-	onDisableClick?: () => void;
-}
-
-const MenuItemLikeButton: React.FC<MenuItemLikeButtonProps> = ({
+const MenuItemLikeButton = ({
 	title,
 	className,
 	onClick,
@@ -129,6 +116,15 @@ const MenuItemLikeButton: React.FC<MenuItemLikeButtonProps> = ({
 	id,
 	image,
 	onDisableClick,
+}: {
+	title: string;
+	className?: string;
+	onClick: () => void;
+	iconName?: string;
+	disabled?: boolean;
+	id: string;
+	image?: boolean;
+	onDisableClick?: () => void;
 }) => (
 	<div
 		role="presentation"
@@ -160,7 +156,15 @@ const ReportIncidentButton = ({
 	disabled,
 	id,
 	image,
-}: MenuItemLikeButtonProps) => (
+}: {
+	title: string;
+	className?: string;
+	onClick: () => void;
+	iconName?: string;
+	disabled?: boolean;
+	id: string;
+	image?: boolean;
+}) => (
 	<div
 		role="presentation"
 		className={_cs(styles.menuItemLikeButton, className)}
@@ -257,7 +261,7 @@ class Navbar extends React.PureComponent<Props, State> {
 		this.setState({ activeGroupButton: data });
 	};
 
-	private handledisableOutsideDivClick = (boolean) => {
+	private handledisableOutsideDivClick = (boolean: boolean) => {
 		this.setState({
 			disableOutsideDivClick: boolean,
 		});
@@ -320,6 +324,8 @@ class Navbar extends React.PureComponent<Props, State> {
 								: styles.buttomGroup
 						}
 						title=""
+						iconName={ButtonGroupLogo}
+						image
 						id="group-menu-list"
 						handleActiveGroupButton={this.handleActiveGroupButton}
 						disableOutsideDivClick={disableOutsideDivClick}>

@@ -2,18 +2,20 @@ import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.scss";
 
 const InfoBox = (props: {
-	show?: any;
-	message?: any;
-	onClickOutside?: any;
-	children: JSX.Element;
+	show?: boolean;
+	message?: string;
+	onClickOutside?: () => void;
+	children: React.ReactNode;
 }) => {
 	const ref = useRef(null);
 	const { onClickOutside } = props;
 
 	useEffect(() => {
 		const handleClickOutside = (event: { target: any }) => {
-			if (ref.current && !ref.current.contains(event.target)) {
-				onClickOutside && onClickOutside();
+			if (onClickOutside) {
+				if (ref.current && !ref.current.contains(event.target)) {
+					onClickOutside();
+				}
 			}
 		};
 		document.addEventListener("click", handleClickOutside, true);

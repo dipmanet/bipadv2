@@ -2,11 +2,10 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-indent */
 
-import Loadable from "react-loadable";
 import React from "react";
 import Redux from "redux";
 import { connect } from "react-redux";
-import { Router, navigate } from "@reach/router";
+import { Routes, Route } from "react-router-dom";
 import { _cs, bound } from "@togglecorp/fujs";
 import memoize from "memoize-one";
 import { bbox, point, buffer } from "@turf/turf";
@@ -23,7 +22,6 @@ import { getLayerName } from "#re-map/utils";
 import Icon from "#rscg/Icon";
 import { setStyleProperty } from "#rscu/styles";
 import Responsive from "#rscg/Responsive";
-import DangerButton from "#rsca/Button/DangerButton";
 import { AppState } from "#store/types";
 import {
 	RouteDetailElement,
@@ -48,7 +46,6 @@ import PageContext from "#components/PageContext";
 import TitleContextProvider from "#components/TitleContext";
 import LayerSwitch from "#components/LayerSwitch";
 import LayerToggle from "#components/LayerToggle";
-import MapDownloadButton from "#components/MapDownloadButton";
 import { routeSettings } from "#constants";
 import RiskInfoLayerContext from "#components/RiskInfoLayerContext";
 import AppBrand from "#components/AppBrand";
@@ -73,7 +70,6 @@ import {
 	setInitialRunAction,
 } from "#actionCreators";
 
-import authRoute from "#components/authRoute";
 import { getFeatureInfo } from "#utils/domain";
 import {
 	createConnectedRequestCoordinator,
@@ -84,61 +80,11 @@ import {
 import ZoomToolBar from "#components/ZoomToolBar";
 import LanguageToggle from "#components/LanguageToggle";
 import { enTranslation, npTranslation } from "#constants/translations";
-import errorBound from "../errorBound";
-import helmetify from "../helmetify";
 import styles from "./styles.module.scss";
 import DownloadButtonOption from "./DownloadButtonOption";
-
-function reloadPage() {
-	window.location.reload(false);
-}
-
-const ErrorInPage = () => (
-	<div className={styles.errorInPage}>
-		Some problem occurred.
-		<DangerButton transparent onClick={reloadPage}>
-			Reload
-		</DangerButton>
-	</div>
-);
-
-const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
-	<div className={styles.retryableErrorInPage}>
-		Some problem occurred.
-		<DangerButton onClick={retry} transparent>
-			Reload
-		</DangerButton>
-	</div>
-);
-
-interface LoadOptions {
-	error: string;
-	retry: () => void;
-}
-
-const LoadingPage = ({ error, retry }: LoadOptions) => {
-	if (error) {
-		// NOTE: show error while loading page
-		console.error(error);
-		return <RetryableErrorInPage error={error} retry={retry} />;
-	}
-	return <Loading text="Loading Page" pending />;
-};
-
-const routes = routeSettings.map(({ load, ...settings }) => {
-	const Com = authRoute<typeof settings>()(
-		helmetify(
-			Loadable({
-				loader: load,
-				loading: LoadingPage,
-			})
-		)
-	);
-
-	const Component = errorBound<typeof settings>(ErrorInPage)(Com);
-
-	return <Component key={settings.name} {...settings} />;
-});
+import { WithRouter } from "#utils/hooks/WithRouter";
+import { generateRoutes } from "#utils/generateRoutes";
+import { ErrorInPage } from "src/Multiplexer/components";
 
 // MULTIPLEXER
 
@@ -574,6 +520,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
 			],
 		};
 	}
+	// converting reachrouter's rotues to format of react router
+	public ROUTES = generateRoutes(routeSettings);
 
 	public componentDidMount() {
 		// NOTE: this means everything has loaded before mounting this page,
@@ -1204,7 +1152,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
 		if (pending) {
 			return <Loading text="Loading Resources" pending />;
 		}
-		return <Router>{routes}</Router>;
+		return (
+			<Routes>
+				{this.ROUTES.map((route, index) => (
+					<Route key={index} path={route.path} element={route.element} />
+				))}
+				<Route path="*/" element={<ErrorInPage />} />
+			</Routes>
+		);
 	};
 
 	private setLeftPanelWidth = memoize((boundingClientRect) => {
@@ -2214,6 +2169,6 @@ export default connect(
 	mapDispatchToProps
 )(
 	createConnectedRequestCoordinator<PropsWithRedux>()(
-		createRequestClient(requests)(Responsive(Multiplexer))
+		createRequestClient(requests)(Responsive(WithRouter(Multiplexer)))
 	)
 );

@@ -1,56 +1,52 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo } from "react";
 
-import { MapChildContext } from './context';
+import { MapChildContext } from "./context";
 
 interface Props {
-    bounds?: [number, number, number, number];
-    padding: number;
-    duration: number;
+	bounds?: [number, number, number, number];
+	padding?: number;
+	duration?: number;
 }
 
-const MapBounds = (props: Props) => {
-    const { map, setBounds } = useContext(MapChildContext);
-    const {
-        padding,
-        duration,
-        bounds,
-    } = props;
+const MapBounds: React.FC<Props> = ({ bounds, padding = 0, duration = 200 }) => {
+	const { map, setBounds } = useContext(MapChildContext);
 
-    const [initialPadding] = useState(padding);
-    const [initialDuration] = useState(duration);
+	// Memoize validated bounds
+	const validatedBounds = useMemo(() => {
+		if (!bounds || bounds.length !== 4 || bounds.includes(null as any)) {
+			return null;
+		}
+		return bounds;
+	}, [bounds]);
 
-    // Handle change in bounds
-    useEffect(
-        () => {
-            if (!map || !bounds) {
-                return;
-            }
-            // NOTE: just to be safe here
-            if (bounds.length < 4) {
-                return;
-            }
+	useEffect(() => {
+		if (!map || !validatedBounds) {
+			return;
+		}
 
-            const [fooLon, fooLat, barLon, barLat] = bounds;
-            setBounds(bounds, initialPadding, initialDuration);
+		const [fooLon, fooLat, barLon, barLat] = validatedBounds;
 
-            map.fitBounds(
-                [[fooLon, fooLat], [barLon, barLat]],
-                {
-                    padding: initialPadding,
-                    duration: initialDuration,
-                },
-            );
-        },
-        [map, bounds, initialPadding, initialDuration, setBounds],
-    );
+		// Defensive: ensure no undefined coordinates
+		if ([fooLon, fooLat, barLon, barLat].some((coord) => coord === undefined || coord === null)) {
+			console.warn("Invalid bounds detected:", validatedBounds);
+			return;
+		}
 
-    return null;
-};
+		setBounds(validatedBounds, padding, duration);
 
+		map.fitBounds(
+			[
+				[fooLon, fooLat],
+				[barLon, barLat],
+			],
+			{
+				padding,
+				duration,
+			}
+		);
+	}, [map, validatedBounds, padding, duration, setBounds]);
 
-MapBounds.defaultProps = {
-    padding: 0,
-    duration: 200, // ms
+	return null;
 };
 
 export default MapBounds;

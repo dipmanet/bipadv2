@@ -13,61 +13,64 @@ import { AppState } from "#store/types";
 import { initializeStyles, setStyleProperties } from "#rscu/styles";
 
 import App from "./App";
+import { BrowserRouter } from "react-router-dom";
 
 interface State {
-  rehydrated: boolean;
+	rehydrated: boolean;
 }
 type Props = unknown;
 
 /* Loads redux into memory */
 /* Create redux context */
 export default class Root extends React.Component<Props, State> {
-  public constructor(props: Props) {
-    super(props);
+	public constructor(props: Props) {
+		super(props);
 
-    this.state = { rehydrated: false };
+		this.state = { rehydrated: false };
 
-    initializeStyles();
-    setStyleProperties(styleProperties);
+		initializeStyles();
+		setStyleProperties(styleProperties);
 
-    // Add icons
-    Object.keys(iconNames).forEach((key) => {
-      addIcon("font", key, iconNames[key as keyof typeof iconNames]);
-    });
+		// Add icons
+		Object.keys(iconNames).forEach((key) => {
+			addIcon("font", key, iconNames[key as keyof typeof iconNames]);
+		});
 
-    console.info("React version:", React.version);
+		console.info("React version:", React.version);
 
-    // FIXME: later
-    this.store = store as Store<AppState>;
-  }
+		// FIXME: later
+		this.store = store as Store<AppState>;
+	}
 
-  private persistor!: Persistor; // initialized in componentDidMount
+	private persistor!: Persistor; // initialized in componentDidMount
 
-  private setRehydrated = () => {
-    this.setState({ rehydrated: true });
-  };
+	private setRehydrated = () => {
+		this.setState({ rehydrated: true });
+	};
 
-  private store: Store<AppState>;
+	private store: Store<AppState>;
 
-  public componentDidMount() {
-    // Now persistor initializes after mount, safe for setState
-    this.persistor = persistStore(this.store, undefined, this.setRehydrated);
-  }
+	public componentDidMount() {
+		// Now persistor initializes after mount, safe for setState
+		this.persistor = persistStore(this.store, undefined, this.setRehydrated);
+	}
 
-  public render() {
-    const { rehydrated } = this.state;
+	public render() {
+		const { rehydrated } = this.state;
 
-    if (!rehydrated) {
-      // NOTE: showing empty div, this lasts for a fraction of a second
-      return <div />;
-    }
+		if (!rehydrated) {
+			// NOTE: showing empty div, this lasts for a fraction of a second
+			return <div />;
+		}
 
-    return (
-      <Provider store={this.store}>
-        <ReduxContext.Provider value={{ persistor: this.persistor }}>
-          <App />
-        </ReduxContext.Provider>
-      </Provider>
-    );
-  }
+		return (
+			<Provider store={this.store}>
+				<ReduxContext.Provider value={{ persistor: this.persistor }}>
+					<BrowserRouter>
+						<App />
+					</BrowserRouter>
+				</ReduxContext.Provider>
+			</Provider>
+		);
+	}
 }
