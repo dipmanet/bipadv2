@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { _cs } from "@togglecorp/fujs";
 import { Translation } from "react-i18next";
 
-import { navigate } from "@reach/router";
+import { RouterProps, WithRouter } from "#utils/hooks/WithRouter";
 
 import ListView from "#rscv/List/ListView";
 import Icon from "#rscg/Icon";
@@ -237,7 +237,11 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const menuKeySelector = (d: { name: string }) => d.name;
 
-const gotoadmin = () => navigate("/admin");
+const gotoadmin = (router: RouterProps | undefined) => {
+	if (router) {
+		router.navigate("/admin");
+	}
+};
 
 class Navbar extends React.PureComponent<Props, State> {
 	constructor(props) {
@@ -512,7 +516,7 @@ class Navbar extends React.PureComponent<Props, State> {
 									id="drrm"
 									iconName="textDocument"
 									modal={<PalikaReport />}
-									onClick={() => navigate("/drrm-report/")}
+									onClick={() => this.props.router.navigate("/drrm-report/")}
 								/>
 							)}
 						</Translation>
@@ -556,7 +560,7 @@ class Navbar extends React.PureComponent<Props, State> {
 									title={t("Admin")}
 									id="admin"
 									iconName="user"
-									onClick={gotoadmin}
+									onClick={() => gotoadmin(this.props.router)}
 									disabled={logoutRequest.pending}
 								/>
 							)}
@@ -587,4 +591,8 @@ Navbar.contextType = PageContext;
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(createConnectedRequestCoordinator<ReduxProps>()(createRequestClient(requestOptions)(Navbar)));
+)(
+	createConnectedRequestCoordinator<ReduxProps>()(
+		createRequestClient(requestOptions)(WithRouter(Navbar))
+	)
+);

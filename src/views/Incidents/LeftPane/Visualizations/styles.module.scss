@@ -1,58 +1,56 @@
-@import '~base-scss/base';
+@use "~base-scss/base" as *;
 
 .visualizations {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: var(--spacing-medium);
-    overflow: auto;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	padding: var(--spacing-medium);
+	overflow: auto;
 
-    .hazard-statistics-chart {
-        .header {
-            display: flex;
-            // align-items: center;
-            justify-content: flex-end;
-            .heading {
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-            .chart-download {
-                padding: 0 $spacing-medium;
-            }
-        }
+	.hazard-statistics-chart {
+		.header {
+			display: flex;
+			// align-items: center;
+			justify-content: flex-end;
+			.heading {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+			.chart-download {
+				padding: 0 $spacing-medium;
+			}
+		}
 
-        .chart {
-            // height: 320px;
-            h4{
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-                
-            }
-        }
-    }
+		.chart {
+			// height: 320px;
+			h4 {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+		}
+	}
 
-    .severity-summary {
-       
-        .header {
-            .heading {
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-        }
+	.severity-summary {
+		.header {
+			.heading {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+		}
 
-        .chart {
-            height: 320px;
-            h4{
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-        }
-    }
-    .label-list {
-        // fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
-        font-size: 1rem;
-        font-weight: normal;
-        fill: black;
-        margin: 10rem;
-    }
+		.chart {
+			height: 320px;
+			h4 {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+		}
+	}
+	.label-list {
+		// fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
+		font-size: 1rem;
+		font-weight: normal;
+		fill: black;
+		margin: 10rem;
+	}
 }

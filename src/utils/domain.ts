@@ -85,7 +85,7 @@ export const calculateSeverity = (loss: Loss | undefined, scaleFactor: number = 
     */
 };
 
-const severityScaleFactor = 1;
+export const severityScaleFactor = 1;
 
 export const BulletinMapCircleRadius = (severity: number): number => {
 	if (!severity) {
