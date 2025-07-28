@@ -7,10 +7,10 @@ import { FaramInputElement } from "@togglecorp/faram";
 import ListView from "../../View/List/ListView";
 import RemovableListItem from "../RemovableListItem";
 
-import HintAndError from "../HintAndError/index.jtsx";
+import HintAndError from "../HintAndError";
 import Label from "../Label";
 import styles from "./styles.module.scss";
-../HintAndError/index.tsx
+
 const propTypes = {
 	className: PropTypes.string,
 	disabled: PropTypes.bool,

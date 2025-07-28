@@ -4,12 +4,12 @@ import { SortableContainer, SortableElement, SortableHandle, arrayMove } from "r
 import { FaramInputElement } from "@togglecorp/faram";
 import { _cs } from "@togglecorp/fujs";
 
-import HintAndError from "../HintAndError/index.jtsx";
+import HintAndError from "../HintAndError";
 import Label from "../Label/index.tsx";
 import Icon from "../../General/Icon/index.tsx";
 import Button from "../../Action/Button/index.tsx";
-import Select from "./Select.js";
-import ExtraRoot from "./E../HintAndError/index.tsx
+import Select from "./Select";
+import ExtraRoot from "./ExtraRoot";
 import SeparateDataValue from "./SeparateDataValue.js";
 
 import styles from "./styles.module.scss";

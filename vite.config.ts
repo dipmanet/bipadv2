@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import viteCompression from "vite-plugin-compression";
 import path from "path";
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,11 +13,13 @@ export default defineConfig({
 				plugins: [["@babel/plugin-proposal-decorators", { legacy: true }]],
 			},
 		}),
+		svgr(),
 		tailwindcss(),
 		viteCompression(),
 	],
 	resolve: {
 		alias: {
+			src: path.resolve(__dirname, "./src"),
 			"#components": path.resolve(__dirname, "./src/components"),
 			"#lib": path.resolve(__dirname, "./src/lib"),
 			"#constants": path.resolve(__dirname, "./src/constants"),
@@ -43,6 +46,11 @@ export default defineConfig({
 			"#re-map": path.resolve(__dirname, "./src/vendors/re-map"),
 			"#Kalimati": path.resolve(__dirname, "./src/resources/fonts/Kalimati Regular.ttf)"),
 			"~base-scss": path.resolve("./src/stylesheets"),
+		},
+	},
+	css: {
+		modules: {
+			localsConvention: "dashesOnly",
 		},
 	},
 

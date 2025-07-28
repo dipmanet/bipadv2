@@ -1,56 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from "react";
+import { currentStyle } from "./index";
 
-import { currentStyle } from './index';
+// Define types for styles and props
+interface Styles {
+	[key: string]: any; // Replace with actual style type if known
+}
 
-const connectWithStyles = (WrappedComponent, styleList = []) => (
-    class extends React.Component {
-        constructor(props) {
-            super(props);
+interface ConnectWithStylesProps {
+	currentStyles: Styles;
+	updatedStyles: Styles;
+	[key: string]: any; // Allow additional props
+}
 
-            this.state = {
-                currentStyles: { ...currentStyle },
-                updatedStyles: {},
-            };
+const connectWithStyles = <P extends ConnectWithStylesProps>(
+	WrappedComponent: React.ComponentType<P>,
+	styleList: string[] = []
+) => {
+	const WrappedWithStyles: React.FC<Omit<P, keyof ConnectWithStylesProps>> = (props) => {
+		const [stylesState, setStylesState] = useState<{
+			currentStyles: Styles;
+			updatedStyles: Styles;
+		}>({
+			currentStyles: { ...currentStyle },
+			updatedStyles: {},
+		});
 
-            // Note: event added in constructor on purpose
-            // to avoid any pre render in children without
-            // injected props
-            document.addEventListener('styleupdate', this.handleStyleUpdate);
-        }
+		const handleStyleUpdate = useCallback(
+			({ updatedStyles }: { updatedStyles: Styles }) => {
+				// Only update if styleList is empty or updatedStyles contains a relevant key
+				const shouldUpdate =
+					styleList.length === 0 || styleList.some((style) => updatedStyles[style]);
 
-        componentWillUnmount() {
-            document.removeEventListener('styleupdate', this.handleStyleUpdate);
-        }
+				if (shouldUpdate) {
+					setStylesState({
+						updatedStyles,
+						currentStyles: { ...currentStyle }, // Create new object as in original
+					});
+				}
+			},
+			[styleList]
+		);
 
-        handleStyleUpdate = ({ updatedStyles }) => {
-            const shouldUpdate = styleList.some(
-                style => styleList.includes(style),
-            );
+		useEffect(() => {
+			// Add event listener
+			document?.addEventListener("styleupdate", handleStyleUpdate);
 
-            if (shouldUpdate || styleList.length === 0) {
-                this.setState({
-                    updatedStyles,
-                    // Note: creating a new object intentionally
-                    currentStyles: { ...currentStyle },
-                });
-            }
-        }
+			// Cleanup on unmount
+			return () => {
+				document?.removeEventListener("styleupdate", handleStyleUpdate);
+			};
+		}, [handleStyleUpdate]);
 
-        render() {
-            const {
-                updatedStyles,
-                currentStyles,
-            } = this.state;
+		return (
+			<WrappedComponent
+				{...(props as P)}
+				currentStyles={stylesState.currentStyles}
+				updatedStyles={stylesState.updatedStyles}
+			/>
+		);
+	};
 
-            return (
-                <WrappedComponent
-                    updatedStyles={updatedStyles}
-                    currentStyles={currentStyles}
-                    {...this.props}
-                />
-            );
-        }
-    }
-);
+	// Set display name for better debugging
+	WrappedWithStyles.displayName = `ConnectWithStyles(${
+		WrappedComponent.displayName || WrappedComponent.name || "Component"
+	})`;
+
+	return WrappedWithStyles;
+};
 
 export default connectWithStyles;

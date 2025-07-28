@@ -3,7 +3,7 @@ import Redux from "redux";
 import { connect } from "react-redux";
 import { _cs } from "@togglecorp/fujs";
 
-import Switch from "react-input-switch";
+import CustomSwitch from "#components/Common/CustomSwitch";
 import ReduxContext from "#components/ReduxContext";
 
 import Checkbox from "#rsu/../v2/Input/Checkbox";
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 	setShowWard: (params) => dispatch(setShowWardAction(params)),
 });
 
-class LayerSwitch extends React.PureComponent<Props, State> {
+class LayerToggle extends React.PureComponent<Props, State> {
 	public render() {
 		const {
 			className,
@@ -88,7 +88,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 				tooltip={
 					language === "en" ? "Select administrative boundary" : "प्रशासनिक सीमा चयन गर्नुहोस्"
 				}>
-				<Switch
+				<CustomSwitch
+					className={styles.switch}
+					value={showProvince ?? false}
+					onChange={(value) => setShowProvince({ value })}
+				/>
+				{/* <Switch
 					className={styles.switch}
 					on
 					off={false}
@@ -96,27 +101,22 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 					onChange={(value) => {
 						setShowProvince({ value });
 					}}
-				/>
+				/> */}
 				{language === "en" ? "Show Province" : "प्रदेश देखाउनुहोस्"}
 				<br />
 
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
-					on
-					off={false}
-					value={showDistrict}
+					value={showDistrict ?? false}
 					onChange={(value) => {
 						setShowDistrict({ value });
 					}}
 				/>
 				{language === "en" ? "Show District" : "जिल्‍ला देखाउनुहोस"}
 				<br />
-
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
-					on
-					off={false}
-					value={showMunicipality}
+					value={showMunicipality ?? false}
 					onChange={(value) => {
 						setShowMunicipality({ value });
 					}}
@@ -124,11 +124,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 				{language === "en" ? "Show Municipality" : "नगरपालिका देखाउनुहोस"}
 				<br />
 
-				<Switch
+				<CustomSwitch
 					className={styles.switch}
-					on
-					off={false}
-					value={showWard}
+					value={showWard ?? false}
 					onChange={(value) => {
 						setShowWard({ value });
 					}}
@@ -168,6 +166,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 		);
 	}
 }
-LayerSwitch.contextType = ReduxContext;
+LayerToggle.contextType = ReduxContext;
 
-export default connect(mapAppStateToComponentProps, mapDispatchToProps)(LayerSwitch);
+export default connect(mapAppStateToComponentProps, mapDispatchToProps)(LayerToggle);

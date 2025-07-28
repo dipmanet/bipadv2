@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React from "react";
 import { _cs } from "@togglecorp/fujs";
 
 import Icon from "../../General/Icon";
@@ -38,8 +38,6 @@ const propTypes = {
 	onClick: PropTypes.func,
 
 	closeOnClick: PropTypes.bool,
-
-	tooltip: PropTypes.string,
 };
 
 const defaultProps = {
@@ -53,82 +51,76 @@ const defaultProps = {
 	dropdownIconClassName: "",
 	onClick: noOp,
 	closeOnClick: false,
-	tooltip: undefined,
 };
 
-function DropdownMenu(props) {
-	const {
-		className: classNameFromProps,
-		children,
-		iconName,
-		hideDropdownIcon,
-		leftComponent,
-		title,
-		dropdownClassName,
-		dropdownIcon,
-		dropdownIconClassName,
-		onClick,
-		closeOnClick,
-		tooltip,
-	} = props;
+export default class DropdownMenu extends React.PureComponent {
+	static propTypes = propTypes;
 
-	const [showDropdown, setShowDropdown] = useState(false);
-	const containerRef = useRef(null);
-	const dropdownContainerRef = useRef(null);
-	const boundingClientRectRef = useRef({});
+	static defaultProps = defaultProps;
 
-	// Equivalent to componentDidMount and componentWillUnmount
-	useEffect(() => {
-		function handleWindowClick() {
-			setTimeout(() => {
-				if (closeOnClick && showDropdown) {
-					setShowDropdown(false);
-				}
-			}, 0);
-		}
+	constructor(props) {
+		super(props);
 
-		window.addEventListener("click", handleWindowClick);
-		return () => {
-			window.removeEventListener("click", handleWindowClick);
+		this.state = {
+			showDropdown: false,
 		};
-	}, [closeOnClick, showDropdown]);
 
-	const handleDropdownClick = useCallback(
-		(e) => {
-			e.stopPropagation();
+		this.boundingClientRect = {};
+	}
 
-			if (containerRef.current) {
-				boundingClientRectRef.current = containerRef.current.getBoundingClientRect();
-			}
+	componentDidMount() {
+		window.addEventListener("click", this.handleWindowClick);
+	}
 
-			setShowDropdown((oldShowDropdown) => {
-				const newShowDropdown = !oldShowDropdown;
-				onClick(newShowDropdown, e);
-				return newShowDropdown;
-			});
-		},
-		[onClick]
-	);
+	componentWillUnmount() {
+		window.removeEventListener("click", this.handleWindowClick);
+	}
 
-	const handleDropdownContainerBlur = useCallback(() => {
-		setShowDropdown(false);
-	}, []);
+	createContainerRef = (el) => {
+		this.container = el;
+	};
 
-	const handleCloseFromChildren = useCallback(() => {
-		setShowDropdown(false);
-	}, []);
+	createDropdownContainerRef = (el) => {
+		this.dropdownContainer = el;
+	};
 
-	const handleDropdownContainerInvalidate = useCallback(() => {
-		const dropdownContainer = dropdownContainerRef.current;
-		if (!dropdownContainer) {
-			return {};
+	handleDropdownClick = (e) => {
+		e.stopPropagation();
+
+		if (this.container) {
+			this.boundingClientRect = this.container.getBoundingClientRect();
 		}
 
-		const contentRect = dropdownContainer?.getBoundingClientRect();
-		let parentRect = boundingClientRectRef.current;
+		const { showDropdown: oldShowDropdown } = this.state;
+		this.setState((state) => ({ showDropdown: !state.oldShowDropdown }));
 
-		if (containerRef.current) {
-			parentRect = containerRef.current?.getBoundingClientRect();
+		const { onClick } = this.props;
+		onClick(!oldShowDropdown, e);
+	};
+
+	handleDropdownContainerBlur = () => {
+		this.setState({ showDropdown: false });
+	};
+
+	handleCloseFromChildren = () => {
+		this.setState({ showDropdown: false });
+	};
+
+	handleWindowClick = () => {
+		const { closeOnClick } = this.props;
+
+		setTimeout(() => {
+			if (closeOnClick && this.state.showDropdown) {
+				this.setState({ showDropdown: false });
+			}
+		}, 0);
+	};
+
+	handleDropdownContainerInvalidate = (dropdownContainer) => {
+		const contentRect = dropdownContainer.getBoundingClientRect();
+		let parentRect = this.boundingClientRect;
+		if (this.container) {
+			parentRect = this.container.getBoundingClientRect();
 		}
 
 		const optionsContainerPosition = calcFloatPositionInMainWindow({
@@ -136,9 +128,18 @@ function DropdownMenu(props) {
 			contentRect,
 		});
 		return optionsContainerPosition;
-	}, []);
+	};
 
-	const renderDropdownButton = () => {
+	renderDropdownButton = () => {
+		const {
+			title,
+			hideDropdownIcon,
+			dropdownIcon,
+			iconName,
+			leftComponent,
+			dropdownIconClassName,
+		} = this.props;
+
 		const leftIconClassName = _cs("left-icon", styles.leftIcon);
 
 		const className = _cs(
@@ -152,7 +153,7 @@ function DropdownMenu(props) {
 		const iconClassName = _cs("dropdown-icon", styles.dropdownIcon, dropdownIconClassName);
 
 		return (
-			<button onClick={handleDropdownClick} className={className} type="button">
+			<button onClick={this.handleDropdownClick} className={className} type="button">
 				{iconName && <Icon className={leftIconClassName} name={iconName} />}
 				{leftComponent}
 				{title && <span className={titleClassName}>{title}</span>}
@@ -161,45 +162,51 @@ function DropdownMenu(props) {
 		);
 	};
 
-	const renderDropdownContainer = () => {
+	renderDropdownContainer = () => {
+		const { dropdownClassName, children } = this.props;
+
 		const className = _cs(dropdownClassName, "dropdown-container", styles.dropdownContainer);
 
 		let modifiedChildren = children;
 
 		if (React.Children.count(children) === 1 && React.isValidElement(children)) {
-			const newProps = { closeModal: handleCloseFromChildren };
+			const newProps = { closeModal: this.handleCloseFromChildren };
+
 			modifiedChildren = React.cloneElement(children, newProps);
 		}
 
 		return (
 			<FloatingContainer
-				ref={dropdownContainerRef}
+				ref={this.createDropdownContainerRef}
 				className={className}
-				onBlur={handleDropdownContainerBlur}
-				parent={containerRef.current}
-				onInvalidate={handleDropdownContainerInvalidate}>
+				onBlur={this.handleDropdownContainerBlur}
+				parent={this.container}
+				onInvalidate={this.handleDropdownContainerInvalidate}>
 				{modifiedChildren}
 			</FloatingContainer>
 		);
 	};
 
-	const className = _cs(
-		classNameFromProps,
-		"dropdown-menu",
-		styles.dropdownMenu,
-		showDropdown && "active",
-		showDropdown && styles.active
-	);
+	render() {
+		const { className: classNameFromProps, tooltip } = this.props;
+		const { showDropdown } = this.state;
 
-	return (
-		<div ref={containerRef} className={className} title={tooltip}>
-			{renderDropdownButton()}
-			{showDropdown && renderDropdownContainer()}
-		</div>
-	);
+		const className = _cs(
+			classNameFromProps,
+			"dropdown-menu",
+			styles.dropdownMenu,
+			showDropdown && "active",
+			showDropdown && styles.active
+		);
+
+		const DropdownButton = this.renderDropdownButton;
+		const DropdownContainer = this.renderDropdownContainer;
+
+		return (
+			<div ref={this.createContainerRef} className={className} title={tooltip}>
+				<DropdownButton />
+				{showDropdown && <DropdownContainer />}
+			</div>
+		);
+	}
 }
-
-DropdownMenu.propTypes = propTypes;
-DropdownMenu.defaultProps = defaultProps;
-
-export default DropdownMenu;

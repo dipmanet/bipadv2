@@ -1,5 +1,5 @@
 import React from "react";
-import Redux from "redux";
+import Redux, { compose } from "redux";
 import { connect } from "react-redux";
 import memoize from "memoize-one";
 import { _cs, Obj } from "@togglecorp/fujs";
@@ -185,11 +185,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 		url: "/alert/",
 		method: methods.GET,
 		query: ({ props: { filters } }) => ({
-			...transformFilters(filters, { start: "started_on__gt", end: "started_on__lt" }),
+			...transformFilters(filters, {
+				start: "started_on__gt",
+				end: "started_on__lt",
+			}),
 			expand: ["event"],
 			ordering: "-started_on",
 		}),
 		onSuccess: ({ response, props: { setAlertList }, params }) => {
+			console.log("test response", response);
 			interface Response {
 				results: PageTypes.Alert[];
 			}
@@ -224,7 +228,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 		url: "/event/",
 		method: methods.GET,
 		query: ({ props: { filters } }) => ({
-			...transformFilters(filters, { start: "started_on__gt", end: "started_on__lt" }),
+			...transformFilters(filters, {
+				start: "started_on__gt",
+				end: "started_on__lt",
+			}),
 			ordering: "-created_on",
 			// expand: 'hazard',
 		}),
@@ -303,13 +310,17 @@ class Dashboard extends React.PureComponent<Props, State> {
 		};
 
 		const {
-			requests: { alertsRequest },
+			requests: { alertsRequest, eventsRequest },
 		} = this.props;
 
 		alertsRequest.setDefaultParams({
 			triggerAlertRequest: this.alertPoll,
 			triggerEventRequest: this.eventPoll,
 		});
+		alertsRequest.do();
+		// eventsRequest.setDefaultParams({
+		// 	triggerAlertRequest: this.eventPoll,
+		// });
 	}
 
 	public componentDidMount(): void {
@@ -535,7 +546,10 @@ class Dashboard extends React.PureComponent<Props, State> {
 	}
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(createConnectedRequestCoordinator<ReduxProps>()(createRequestClient(requests)(Dashboard)));
+const ConnectedDashboard = compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	createConnectedRequestCoordinator<ReduxProps>(),
+	createRequestClient(requests)
+)(Dashboard);
+
+export default ConnectedDashboard;

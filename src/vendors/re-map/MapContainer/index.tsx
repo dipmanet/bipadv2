@@ -10,8 +10,7 @@ interface Props {
 }
 
 // TODO: make container responsive
-const MapContainer = (props: Props) => {
-	const { className } = props;
+const MapContainer: React.FC<Props> = ({ className }) => {
 	const { mapContainerRef, map } = useContext(MapChildContext);
 	const rect = useDimension(mapContainerRef);
 

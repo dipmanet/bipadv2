@@ -4,7 +4,7 @@ import { listToMap, isListEqual } from "@togglecorp/fujs";
 
 import FloatingContainer from "../../../View/FloatingContainer";
 import List from "../../../View/List";
-import Option from "../Option";
+import Option from "../Option/index";
 
 import styles from "./styles.module.scss";
 

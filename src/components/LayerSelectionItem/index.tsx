@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import React from "react";
 import { _cs } from "@togglecorp/fujs";
-import Switch from "react-input-switch";
+import CustomSwitch from "#components/Common/CustomSwitch";
 
 import { connect } from "react-redux";
 import LayerDetailModalButton from "#components/LayerDetailModalButton";
@@ -64,12 +64,10 @@ class LayerSelectionItem extends React.PureComponent<Props> {
 		return (
 			<div className={_cs(className, styles.layerSelectionItem)}>
 				<div className={styles.switchInput}>
-					<Switch
+					<CustomSwitch
 						disabled={disabled}
 						className={styles.switch}
-						on
-						off={false}
-						value={isActive}
+						value={isActive ?? false}
 						onChange={this.handleChange}
 					/>
 					<div className={styles.title}>

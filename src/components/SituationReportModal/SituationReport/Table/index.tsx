@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from "react";
 import { Translation } from "react-i18next";
 import { connect } from "react-redux";
@@ -6,7 +5,6 @@ import { _cs } from "@togglecorp/fujs";
 import PropTypes from "prop-types";
 
 import { languageSelector } from "#selectors";
-import { AppState } from "#store/types";
 import styles from "./styles.module.scss";
 
 const propTypes = {

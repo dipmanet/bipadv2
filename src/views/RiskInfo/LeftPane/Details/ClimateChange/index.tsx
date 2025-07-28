@@ -3,7 +3,7 @@ import React from "react";
 import { extent } from "d3-array";
 import memoize from "memoize-one";
 import { _cs, mean, listToMap, doesObjectHaveNoData } from "@togglecorp/fujs";
-import Switch from "react-input-switch";
+import CustomSwitch from "#components/Common/CustomSwitch";
 import {
 	ResponsiveContainer,
 	ComposedChart,
@@ -607,12 +607,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
 					{(t) => (
 						<div className={_cs(styles.climateChange, className)}>
 							<div className={styles.header}>
-								<Switch
+								<CustomSwitch
 									disabled={pending}
 									className={styles.switch}
-									on
-									off={false}
-									value={isActive}
+									value={isActive ?? false}
 									onChange={this.handleChange}
 								/>
 								<div className={styles.title}>{t("Climate change")}</div>
@@ -793,7 +791,9 @@ class ClimateChange extends React.PureComponent<Props, State> {
 }
 
 ClimateChange.contextType = RiskInfoLayerContext;
-export default compose(
+const ConnectedClimateChange = compose(
 	connect(mapStateToProps),
 	createRequestClient(requestOptions)
 )(ClimateChange);
+
+export default ConnectedClimateChange;

@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 
-interface RiskInfoLayerType {
-}
+type RiskInfoLayerType = unknown;
 
-export default React.createContext<RiskInfoLayerType>({});
+const RiskInfoLayerContext = React.createContext<RiskInfoLayerType>({} as RiskInfoLayerType);
+
+export default RiskInfoLayerContext;

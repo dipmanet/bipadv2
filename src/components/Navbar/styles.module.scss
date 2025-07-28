@@ -1,154 +1,146 @@
 .navbar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-foreground);
+  width: var(--width-navbar);
+
+  .menu-item-list {
+    flex-grow: 1;
+    overflow-x: hidden;
+
+    .menu-item {
+      border-bottom: var(--width-separator-thin) solid
+        var(--color-separator-light);
+      padding: var(--spacing-small-alt) 0;
+    }
+  }
+
+  .bottom {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-foreground);
-    width: var(--width-navbar);
+    flex-shrink: 0;
 
-    .menu-item-list {
-        flex-grow: 1;
-        overflow: auto;
+    .reportIncident {
+      position: absolute;
+      right: 160px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: row;
 
-        .menu-item {
-            border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
-            padding: var(--spacing-small-alt) 0;
-        }
-    }
+      .reportIncidentTitle {
+        width: 130px;
+        font-size: 16px;
+        color: #e35163;
+        padding: var(--spacing-extra-small);
+        text-align: center;
+        font-weight: bold;
+      }
 
-    .bottom {
+      .incidentButtonImagePart {
         display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-
-
-        .reportIncident {
-            position: absolute;
-            right: 160px;
-            bottom: 20px;
-            display: flex;
-            flex-direction: row;
-
-            .reportIncidentTitle {
-                width: 130px;
-                font-size: 16px;
-                color: #E35163;
-                padding: var(--spacing-extra-small);
-                text-align: center;
-                font-weight: bold;
-
-            }
-
-            .incidentButtonImagePart {
-                display: flex;
-                height: 50px;
-                width: 50px;
-                background-color: white;
-                justify-content: center;
-                align-items: center;
-                border-radius: 50%;
-                box-shadow: 0 3px 10px #BBBBBA;
-            }
-        }
-
-        .container {
-            position: relative;
-        }
-
-
-
-        .menu-item {
-            padding: var(--spacing-small-alt) 0;
-        }
-
-        .user-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-medium);
-            font-size: var(--font-size-large);
-        }
-
-        .report-incident-button,
-        .reliefButton {
-            padding: var(--spacing-medium) 0;
-
-        }
-
-        .reportIncidentutton {
-            color: #E66677;
-        }
-
-        .insideContainerComponent {
-            width: 33%
-        }
-
-        .buttomGroup {
-            padding: var(--spacing-medium) 0;
-
-        }
-
-        .logout-button {
-            padding: var(--spacing-medium) 0;
-
-
-
-        }
-
-        .selectedButtonActive {
-            padding: var(--spacing-medium) 0;
-            color: #E66677;
-            width: 33%;
-
-            path {
-                fill: #E66677;
-            }
-        }
-
-        .logoutButtonActive {
-            padding: var(--spacing-medium) 0;
-            color: #E66677;
-
-            path {
-                fill: #E66677;
-            }
-        }
+        height: 50px;
+        width: 50px;
+        background-color: white;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        box-shadow: 0 3px 10px #bbbbba;
+      }
     }
+
+    .container {
+      position: relative;
+    }
+
+    .menu-item {
+      padding: var(--spacing-small-alt) 0;
+    }
+
+    .user-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-medium);
+      font-size: var(--font-size-large);
+    }
+
+    .report-incident-button,
+    .reliefButton {
+      padding: var(--spacing-medium) 0;
+    }
+
+    .reportIncidentutton {
+      color: #e66677;
+    }
+
+    .insideContainerComponent {
+      width: 33%;
+    }
+
+    .buttomGroup {
+      padding: var(--spacing-medium) 0;
+    }
+
+    .logout-button {
+      padding: var(--spacing-medium) 0;
+    }
+
+    .selectedButtonActive {
+      padding: var(--spacing-medium) 0;
+      color: #e66677;
+      width: 33%;
+
+      path {
+        fill: #e66677;
+      }
+    }
+
+    .logoutButtonActive {
+      padding: var(--spacing-medium) 0;
+      color: #e66677;
+
+      path {
+        fill: #e66677;
+      }
+    }
+  }
 }
 
 .menu-item-like-button {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--color-text);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text);
 
-    .icon {
-        font-size: var(--font-size-extra-large);
-    }
+  .icon {
+    font-size: var(--font-size-extra-large);
+  }
 
-    .title {
-        padding: var(--spacing-extra-small);
-        text-align: center;
-        font-size: var(--font-size-extra-small);
-        font-weight: bold;
+  .title {
+    padding: var(--spacing-extra-small);
+    text-align: center;
+    font-size: var(--font-size-extra-small);
+    font-weight: bold;
 
-        // @media (max-height: 768px) {
-        //     display: none;
-        // }
-    }
+    // @media (max-height: 768px) {
+    //     display: none;
+    // }
+  }
 
-    &:hover {
-        color: var(--color-accent);
-    }
+  &:hover {
+    color: var(--color-accent);
+  }
 
-    &.active {
-        background-color: var(--color-accent);
-        color: var(--color-text-on-accent);
-    }
+  &.active {
+    background-color: var(--color-accent);
+    color: var(--color-text-on-accent);
+  }
 
-    &.disabled {
-        color: var(--color-text-disabled);
-        pointer-events: none;
-    }
+  &.disabled {
+    color: var(--color-text-disabled);
+    pointer-events: none;
+  }
 }
