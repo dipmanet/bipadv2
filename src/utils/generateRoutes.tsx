@@ -32,7 +32,7 @@ export function generateRoutes(routeSettings: SomeRoute[]): RouteObject[] {
 			return {
 				path: route.path!,
 				element: (
-					<Suspense fallback={<Loading text="Loading Resources" pending />}>
+					<Suspense fallback={<Loading text="Loading Page" pending />}>
 						<LazyComponent />
 					</Suspense>
 				),

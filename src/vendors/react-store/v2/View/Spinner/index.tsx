@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { _cs } from "@togglecorp/fujs";
 
 import connectWithStyles from "../../../utils/styles/connectWithStyles";
@@ -24,7 +24,7 @@ const sizeClassNameMap: {
 };
 
 function Spinner(props: Props) {
-	const { className, currentStyles, size } = props;
+	const { className, currentStyles, size = "medium" } = props;
 
 	const { spinnerSize, centerX, centerY, radius, strokeWidth } = useMemo(() => {
 		const sizeMapping: {
@@ -79,8 +79,5 @@ function Spinner(props: Props) {
 	);
 }
 
-Spinner.defaultProps = {
-	size: "medium",
-};
-
-export default connectWithStyles(Spinner);
+const ThemedSpinner = connectWithStyles(Spinner);
+export default ThemedSpinner;

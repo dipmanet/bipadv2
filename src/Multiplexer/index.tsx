@@ -1154,8 +1154,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
 		}
 		return (
 			<Routes>
-				{this.ROUTES.map((route, index) => (
-					<Route key={index} path={route.path} element={route.element} />
+				{this.ROUTES.map((route) => (
+					<Route key={route.path} path={route.path} element={route.element} />
 				))}
 				<Route path="*/" element={<ErrorInPage />} />
 			</Routes>

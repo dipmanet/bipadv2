@@ -1,11 +1,17 @@
 import React from "react";
-import { Translation } from "react-i18next";
-import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 import Spinner from "#rscu/../v2/View/Spinner";
 import styles from "./styles.module.scss";
 
-const Loading = ({ pending, text }) => {
+interface LoadingProps {
+	pending?: boolean;
+	text?: string;
+}
+
+const Loading: React.FC<LoadingProps> = ({ pending = false, text = "Loading data" }) => {
+	const { t } = useTranslation();
+
 	if (!pending) {
 		return null;
 	}
@@ -13,19 +19,9 @@ const Loading = ({ pending, text }) => {
 	return (
 		<div className={styles.loading}>
 			<Spinner size="large" className={styles.spinner} />
-			<Translation>{(t) => <div className={styles.text}>{t(text)}</div>}</Translation>
+			<div className={styles.text}>{t(text)}</div>
 		</div>
 	);
-};
-
-Loading.propTypes = {
-	pending: PropTypes.bool,
-	text: PropTypes.string,
-};
-
-Loading.defaultProps = {
-	pending: false,
-	text: "Loading data",
 };
 
 export default Loading;

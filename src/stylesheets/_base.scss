@@ -2,6 +2,10 @@
 @use "dimens";
 @use "utils";
 
+@forward "colors";
+@forward "dimens";
+@forward "utils";
+
 @font-face {
 	font-family: "Kalimati Regular";
 	src: url("#Kalimati") format("truetype");

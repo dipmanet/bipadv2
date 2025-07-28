@@ -2,7 +2,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { connect } from "react-redux";
-import { Link } from "@reach/router";
+import { Link } from "react-router-dom";
 import { _cs, isDefined, reverseRoute } from "@togglecorp/fujs";
 import memoize from "memoize-one";
 import PropTypes from "prop-types";
@@ -18,7 +18,7 @@ import IncidentFeedbackFormModal from "#components/IncidentFeedbackFormModal";
 import IncidentFeedbacksModal from "#components/IncidentFeedbacksModal";
 import TextOutput from "#components/TextOutput";
 import { createRequestClient, methods } from "#request";
-import alertIcon from "#resources/icons/Alert.svg";
+import AlertIcon from "#resources/icons/Alert.svg?react";
 import AccentButton from "#rsca/Button/AccentButton";
 import DangerConfirmButton from "#rsca/ConfirmButton/DangerConfirmButton";
 import modalize from "#rscg/Modalize";
@@ -27,6 +27,7 @@ import { languageSelector, sourcesSelector } from "#selectors";
 import { convertDateAccToLanguage, getYesterday } from "#utils/common";
 import styles from "./styles.module.scss";
 import AddIncidentForm from "../AddIncidentForm";
+import { WithRouter } from "#utils/hooks/WithRouter";
 
 const ModalAccentButton = modalize(AccentButton);
 
@@ -206,11 +207,20 @@ class IncidentItem extends React.PureComponent {
 				onMouseEnter={this.handleMouseEnter}
 				onMouseLeave={this.handleMouseLeave}>
 				<div className={styles.left}>
-					<ScalableVectorGraphics
-						className={styles.icon}
-						src={hazard.icon || alertIcon}
-						style={{ color: hazard.color || "#4666b0" }}
-					/>
+					{hazard?.icon ? (
+						<ScalableVectorGraphics
+							className={styles.icon}
+							src={hazard?.icon}
+							style={{ color: hazard.color || "#4666b0" }}
+						/>
+					) : (
+						<AlertIcon />
+					)}
+					{/* <ScalableVectorGraphics
+                       className={styles.icon}
+                       src={hazard?.icon || }
+                       style={{ color: hazard.color || "#4666b0" }}
+                   /> */}
 				</div>
 				<div className={styles.right}>
 					<header className={styles.header}>
@@ -326,4 +336,4 @@ class IncidentItem extends React.PureComponent {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(createRequestClient(requestOptions)(IncidentItem));
+)(createRequestClient(requestOptions)(WithRouter(IncidentItem)));

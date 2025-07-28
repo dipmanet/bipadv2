@@ -44,7 +44,7 @@ export default defineConfig({
 			"#types": path.resolve(__dirname, "./src/types"),
 			"#mapStyles": path.resolve(__dirname, "./src/vendors/osm-liberty"),
 			"#re-map": path.resolve(__dirname, "./src/vendors/re-map"),
-			"#Kalimati": path.resolve(__dirname, "./src/resources/fonts/Kalimati Regular.ttf)"),
+			"#Kalimati": path.resolve(__dirname, "./src/resources/fonts/Kalimati Regular.ttf"),
 			"~base-scss": path.resolve("./src/stylesheets"),
 		},
 	},
@@ -55,7 +55,6 @@ export default defineConfig({
 	},
 
 	optimizeDeps: {
-		include: ["src"],
 		esbuildOptions: {
 			loader: { ".js": "tsx" },
 		},
@@ -64,5 +63,8 @@ export default defineConfig({
 	server: {
 		allowedHosts: true,
 		port: 5173,
+	},
+	build: {
+		sourcemap: true, // Optional: keeps source maps for debugging
 	},
 });
