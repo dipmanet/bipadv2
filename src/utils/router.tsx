@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
-import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound, Vizrisk } from "#utils/routes";
+import { BaseLayout, Dashboard, ErrorBoundary, PageNotFound, Vizrisk, IBF } from "#lib/routes";
 
 export const router = createBrowserRouter([
 	{
@@ -40,6 +40,21 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				element: <Vizrisk />,
+			},
+		],
+	},
+	{
+		path: "/ibf",
+		element: (
+			<BaseLayout>
+				<Outlet />
+			</BaseLayout>
+		),
+		errorElement: <ErrorBoundary />,
+		children: [
+			{
+				index: true,
+				element: <IBF />,
 			},
 		],
 	},

@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import React from "react";
 import { _cs } from "@togglecorp/fujs";
 
 import Icon from "../../../General/Icon";

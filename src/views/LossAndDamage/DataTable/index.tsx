@@ -13,7 +13,7 @@ import ModalBody from "#rscv/Modal/Body";
 import DangerButton from "#rsca/Button/DangerButton";
 import DownloadButton from "#components/DownloadButton";
 import { convertDateAccToLanguage } from "#utils/common";
-import Spinner from "s../vendors/react-store/v2/View/Spinner";
+import Spinner from "src/vendors/react-store/v2/View/Spinner";
 import { createRequestClient, methods } from "@togglecorp/react-rest-request";
 import { createConnectedRequestCoordinator } from "#request";
 import { compose } from "redux";

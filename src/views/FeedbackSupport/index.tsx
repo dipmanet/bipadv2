@@ -5,8 +5,7 @@
 /* eslint-disable react/prop-types */
 
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from "react";
-import { navigate } from "@reach/router";
+import { useState } from "react";
 import { _cs } from "@togglecorp/fujs";
 import Modal from "#rscv/Modal";
 import ModalHeader from "#rscv/Modal/Header";
