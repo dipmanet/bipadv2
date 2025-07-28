@@ -1625,42 +1625,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 		this.setState({ toggleAnimationMapDownloadButton: boolean });
 	};
 
-	private clickHandler = (data) => {
-		const { activeRouteDetails } = this.context;
-		this.setState({ mapDataOnClick: data });
-		this.setState({ tooltipClicked: true });
-		this.setState({
-			tooltipLatlng: data.lngLat,
-		});
-	};
-
-	private closeTooltip = (data) => {
-		this.setState({ tooltipLatlng: data });
-	};
-
-	private handleLandslidePolygonImageMap = (data) => {
-		this.setState({
-			landslidePolygonImagemap: data,
-		});
-	};
-
-	private handlelandslidePolygonChoroplethMapData = (data) => {
-		this.setState({
-			landslidePolygonChoroplethMapData: data,
-		});
-	};
-
-	private setClimateChangeSelectedDistrict = (data) => {
-		const {
-			id,
-			properties: { title },
-		} = data;
-
-		this.setState({
-			climateChangeSelectedDistrict: { id, title },
-		});
-	};
-
 	// private handleCloseWalkThrough = () => {
 	//     this.setState({ closeWalkThrough: true });
 	// }
