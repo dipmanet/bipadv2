@@ -1,67 +1,66 @@
-@import '~base-scss/base';
+@use "~base-scss/base" as *;
 
 .project {
-    cursor: pointer;
-    padding: var(--spacing-medium);
+	cursor: pointer;
+	padding: var(--spacing-medium);
 
-    .heading {
-        padding: 0 var(--spacing-small);
-        text-transform: capitalize;
-    }
+	.heading {
+		padding: 0 var(--spacing-small);
+		text-transform: capitalize;
+	}
 
-    .budget {
-        align-items: baseline;
-        padding: 0 var(--spacing-small);
-        font-size: var(--font-size-large);
-    }
+	.budget {
+		align-items: baseline;
+		padding: 0 var(--spacing-small);
+		font-size: var(--font-size-large);
+	}
 
-    .date-container {
-        display: flex;
+	.date-container {
+		display: flex;
 
-        .end-date,
-        .start-date {
-            padding: 0 var(--spacing-small);
-        }
-    }
+		.end-date,
+		.start-date {
+			padding: 0 var(--spacing-small);
+		}
+	}
 
-    &:hover {
-        background-color: $color-background-hover;
-    }
+	&:hover {
+		background-color: $color-background-hover;
+	}
 }
 
 .modal {
-    .modal-header {
-        >h2 {
-            text-transform: capitalize;
-            font-weight: $font-weight-bold;
-        }
+	.modal-header {
+		> h2 {
+			text-transform: capitalize;
+			font-weight: $font-weight-bold;
+		}
 
-        >button {
-            cursor: pointer;
-        }
-    }
+		> button {
+			cursor: pointer;
+		}
+	}
 
-    .modal-body {
-        height: 540px;
-        overflow-y: auto;
+	.modal-body {
+		height: 540px;
+		overflow-y: auto;
 
-        .table {
-            display: table;
-        }
+		.table {
+			display: table;
+		}
 
+		.capitalize-value {
+			text-transform: capitalize;
+		}
 
-        .capitalize-value {
-            text-transform: capitalize;
-        }
+		.outputs {
+			.output {
+				margin-top: $spacing-large;
 
-        .outputs {
-            .output {
-                margin-top: $spacing-large;
-
-                h3 {
-                    text-transform: capitalize;
-                }
-            }
-        }
-    }
+				h3 {
+					text-transform: capitalize;
+				}
+			}
+		}
+	}
 }

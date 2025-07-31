@@ -740,18 +740,17 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 		const hazardTypeData = Object.values(hazardTypes);
 
 		const hazardSummaryData = {};
-		const hazardSummaryDataCalculation =
-			incidentData &&
-			incidentData.hazardWise &&
-			incidentData.hazardWise.map((item, id) => {
-				const selectedHazardDetails = hazardTypeData.find((itm) => itm.id === item.hazard);
-				const data = {
-					hazardDetail: selectedHazardDetails,
-					summary: { count: item.count },
-				};
-				hazardSummaryData[`${selectedHazardDetails.id}`] = data;
-				return null;
-			});
+		// hazardSummaryDataCalculation: unused variable causing crashing of page
+		// const hazardSummaryDataCalculation = incidentData && incidentData.hazardWise
+		//     && incidentData.hazardWise.map((item, id) => {
+		//         const selectedHazardDetails = hazardTypeData.find(itm => itm.id === item.hazard);
+		//         const data = {
+		//             hazardDetail: selectedHazardDetails,
+		//             summary: { count: item.count },
+		//         };
+		//         hazardSummaryData[`${selectedHazardDetails.id}`] = data;
+		//         return null;
+		//     });
 
 		const barChartData =
 			incidentData &&
