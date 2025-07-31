@@ -1,10 +1,10 @@
-@import '~base-scss/base';
+@use "~base-scss/base" as *;
 
 .aqi {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .tooltip {
-    padding: var(--spacing-medium);
+	padding: var(--spacing-medium);
 }

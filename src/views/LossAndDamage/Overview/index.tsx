@@ -47,6 +47,38 @@ class Overview extends React.PureComponent {
 
 	static contextType = TitleContext;
 
+	componentDidUpdate(prevProps) {
+		const { startDate, endDate, currentSelection } = this.props;
+
+		const selectedMetric = metricMap[currentSelection.key];
+		const { setDamageAndLoss } = this.context;
+
+		if (setDamageAndLoss) {
+			const changed =
+				prevProps.startDate !== startDate ||
+				prevProps.endDate !== endDate ||
+				prevProps.currentSelection.key !== currentSelection.key;
+
+			if (changed) {
+				setDamageAndLoss((prevState) => {
+					if (
+						prevState.mainModule !== selectedMetric.label ||
+						prevState.startDate !== startDate ||
+						prevState.endDate !== endDate
+					) {
+						return {
+							...prevState,
+							mainModule: selectedMetric.label,
+							startDate,
+							endDate,
+						};
+					}
+					return prevState;
+				});
+			}
+		}
+	}
+
 	render() {
 		const {
 			lossAndDamageList,
@@ -83,8 +115,9 @@ class Overview extends React.PureComponent {
 				return null;
 			});
 
-		const maxDataValue =
-			incidentData && incidentData.data && Math.max(...incidentData.data.map((item) => item.count));
+		const maxDataValue = incidentData?.data?.length
+			? Math.max(...incidentData.data.map((item) => item.count))
+			: 1;
 
 		const selectedMetric = metricMap[currentSelection.key];
 		const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
@@ -94,21 +127,6 @@ class Overview extends React.PureComponent {
 			(radioSelect.id === 3 && municipalities) ||
 			(radioSelect.id === 2 && districts) ||
 			(radioSelect.id === 1 && provinces);
-
-		const { setDamageAndLoss } = this.context;
-
-		if (setDamageAndLoss) {
-			setDamageAndLoss((prevState) => {
-				if (
-					prevState.mainModule !== selectedMetric.label ||
-					prevState.startDate !== startDate ||
-					prevState.endDate !== endDate
-				) {
-					return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
-				}
-				return prevState;
-			});
-		}
 
 		return (
 			<Map

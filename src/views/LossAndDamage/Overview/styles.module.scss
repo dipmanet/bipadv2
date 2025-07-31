@@ -1,9 +1,9 @@
-@import '~base-scss/base';
+@use "~base-scss/base" as *;
 
 .left {
-    z-index: 11;
+	z-index: 11;
 }
 
 .right {
-    top: 54px;
+	top: 54px;
 }

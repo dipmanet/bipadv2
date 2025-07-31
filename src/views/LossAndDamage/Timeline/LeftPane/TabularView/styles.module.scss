@@ -1,32 +1,31 @@
-@import '~base-scss/base';
+@use "~base-scss/base" as *;
 
 .tabular-view {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
 
-    .numeral {
-        display: block;
-        padding: $spacing-small;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+	.numeral {
+		display: block;
+		padding: $spacing-small;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-    .table-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        overflow: auto;
+	.table-container {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		overflow: auto;
 
-        .loss-and-damages-table {
-            flex-grow: 1;
-        }
-    }
+		.loss-and-damages-table {
+			flex-grow: 1;
+		}
+	}
 
-    .download-link-container {
-        flex-shrink: 0;
-        padding: $spacing-medium;
-    }
+	.download-link-container {
+		flex-shrink: 0;
+		padding: $spacing-medium;
+	}
 }
-

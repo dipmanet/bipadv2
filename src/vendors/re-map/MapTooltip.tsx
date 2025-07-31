@@ -1,133 +1,98 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import mapboxgl from 'mapbox-gl';
+import React, { useContext, useEffect, useRef } from "react";
+import { createRoot, Root } from "react-dom/client";
+import mapboxgl from "mapbox-gl";
 
-import { MapChildContext } from './context';
+import { MapChildContext } from "./context";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-// TODO: add mapStyle if necessary
 interface Props {
-    children: React.ReactElement;
-    coordinates: [number, number];
-    hidden: boolean;
-    onHide?: () => void;
-    tooltipOptions?: mapboxgl.PopupOptions;
-    trackPointer: boolean;
+	children: React.ReactElement;
+	coordinates: [number, number];
+	hidden: boolean;
+	onHide?: () => void;
+	tooltipOptions?: mapboxgl.PopupOptions;
+	trackPointer?: boolean;
 }
 
-const MapTooltip = (props: Props) => {
-    const { map } = useContext(MapChildContext);
-    const {
-        children,
-        coordinates,
-        hidden,
-        tooltipOptions,
-        onHide,
-        trackPointer,
-    } = props;
+const MapTooltip = ({
+	children,
+	coordinates,
+	hidden = false,
+	tooltipOptions,
+	onHide,
+	trackPointer = false,
+}: Props) => {
+	const { map } = useContext(MapChildContext);
 
-    const tooltipContainerRef = useRef<HTMLDivElement | null>(null);
-    const popupRef = useRef<mapboxgl.Popup | null>(null);
+	const tooltipContainerRef = useRef<HTMLDivElement | null>(null);
+	const popupRef = useRef<mapboxgl.Popup | null>(null);
+	const rootRef = useRef<Root | null>(null);
 
-    const [initialTooltipOptions] = useState(tooltipOptions);
-    const [initialTrackPointer] = useState(trackPointer);
-    const [initialCoordinates] = useState(coordinates);
+	// Create the tooltip <div> and React root once
+	useEffect(() => {
+		const tooltipDiv = document.createElement("div");
+		tooltipContainerRef.current = tooltipDiv;
+		rootRef.current = createRoot(tooltipDiv);
 
-    // Create tooltip <div>
-    useEffect(
-        () => {
-            tooltipContainerRef.current = document.createElement('div');
-            return () => {
-                if (tooltipContainerRef.current) {
-                    tooltipContainerRef.current.remove();
-                }
-            };
-        },
-        [],
-    );
+		return () => {
+			popupRef.current?.remove();
+			rootRef.current?.unmount();
+			tooltipContainerRef.current = null;
+		};
+	}, []);
 
-    // Render react component in tooltip <div>
-    useEffect(
-        () => {
-            if (!map) {
-                return;
-            }
-            ReactDOM.render(
-                children,
-                tooltipContainerRef.current,
-            );
-        },
-        [map, children],
-    );
+	// Render the React children into the tooltip div
+	useEffect(() => {
+		if (!rootRef.current || !tooltipContainerRef.current) return;
+		rootRef.current.render(children);
+	}, [children]);
 
-    // Create mapbox popup and assign to tooltip <div>
-    useEffect(
-        () => {
-            if (!map || !tooltipContainerRef.current || hidden) {
-                return noop;
-            }
+	// Initialize and show popup
+	useEffect(() => {
+		if (!map || !tooltipContainerRef.current || hidden) return noop;
 
-            popupRef.current = new mapboxgl.Popup(initialTooltipOptions)
-                .setDOMContent(tooltipContainerRef.current)
-                .addTo(map);
+		const popup = new mapboxgl.Popup(tooltipOptions)
+			.setDOMContent(tooltipContainerRef.current)
+			.addTo(map);
 
-            if (initialCoordinates) {
-                popupRef.current.setLngLat(initialCoordinates);
-            }
-            if (initialTrackPointer) {
-                popupRef.current.trackPointer();
-            }
+		popupRef.current = popup;
+		console.log("popupRefinitialized", popupRef.current);
 
-            return () => {
-                if (popupRef.current) {
-                    popupRef.current.remove();
-                    popupRef.current = null;
-                }
-            };
-        },
-        [map, hidden, initialTooltipOptions, initialTrackPointer, initialCoordinates],
-    );
+		if (coordinates) {
+			popup.setLngLat(coordinates);
+		}
+		if (trackPointer) {
+			popup.trackPointer();
+		}
 
-    // Handle coordinates change
-    useEffect(
-        () => {
-            if (!map || !popupRef.current || !coordinates || initialTrackPointer) {
-                return;
-            }
-            popupRef.current.setLngLat(coordinates);
-        },
-        [map, coordinates, initialTrackPointer],
-    );
+		return () => {
+			popup.remove();
+			popupRef.current = null;
+		};
+	}, [map, hidden, tooltipOptions, trackPointer, coordinates]);
 
-    // Handle onHide change
-    useEffect(
-        () => {
-            if (!map || !popupRef.current) {
-                return noop;
-            }
-            popupRef.current.on('close', () => {
-                if (onHide) {
-                    onHide();
-                }
-            });
-            return () => {
-                if (popupRef.current) {
-                    popupRef.current.off('close');
-                }
-            };
-        },
-        [map, onHide],
-    );
+	// Update coordinates when they change (if not tracking pointer)
+	useEffect(() => {
+		if (!map || !popupRef.current || trackPointer) return;
+		popupRef.current.setLngLat(coordinates);
+	}, [map, coordinates, trackPointer]);
 
-    return null;
-};
+	// Register close event
+	useEffect(() => {
+		if (!popupRef.current) return;
 
+		const handleClose = () => {
+			onHide?.();
+		};
 
-MapTooltip.defaultProps = {
-    hidden: false,
-    trackPointer: false,
+		popupRef.current.on("close", handleClose);
+		return () => {
+			popupRef.current?.off("close", handleClose);
+		};
+	}, [map, onHide]);
+
+	return null;
 };
 
 export default MapTooltip;
