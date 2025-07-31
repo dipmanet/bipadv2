@@ -1,19 +1,19 @@
-@import '../../../../stylesheets/utils';
+@use "../../../../stylesheets/utils" as *;
 
 .list-view {
-    position: relative;
+	position: relative;
 
-    &.list-view-empty {
-        display: flex;
-        flex-direction: column;
+	&.list-view-empty {
+		display: flex;
+		flex-direction: column;
 
-        .empty {
-            @extend %empty-text;
-            flex-grow: 1;
-        }
-    }
+		.empty {
+			@extend %empty-text;
+			flex-grow: 1;
+		}
+	}
 
-    &.pending {
-        pointer-events: none;
-    }
+	&.pending {
+		pointer-events: none;
+	}
 }
