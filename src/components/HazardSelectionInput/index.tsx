@@ -118,9 +118,8 @@ class HazardSelectionInput extends React.PureComponent {
 	};
 
 	render() {
-		const {
-			activeRouteDetails: { name: activePage },
-		} = this.context;
+		const { activeRouteDetails } = this.context || {};
+		const activePage = activeRouteDetails?.name;
 		const { className, hazardTypeList, value } = this.props;
 
 		const dashboardHazadTypeList = hazardTypeList.filter(
