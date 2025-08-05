@@ -20,7 +20,7 @@ import MapContainer from "#re-map/MapContainer";
 import MapOrder from "#re-map/MapOrder";
 import { getLayerName } from "#re-map/utils";
 import Icon from "#rscg/Icon";
-import { setStyleProperty } from "#rscu/styles";
+import { setStyleProperty } from "#rsu/styles";
 import Responsive from "#rscg/Responsive";
 import { AppState } from "#store/types";
 import {
@@ -46,7 +46,6 @@ import PageContext from "#components/PageContext";
 import TitleContextProvider from "#components/TitleContext";
 import LayerSwitch from "#components/LayerSwitch";
 import LayerToggle from "#components/LayerToggle";
-import { routeSettings } from "#constants";
 import RiskInfoLayerContext from "#components/RiskInfoLayerContext";
 import AppBrand from "#components/AppBrand";
 import Filters from "#components/Filters";
@@ -83,8 +82,8 @@ import { enTranslation, npTranslation } from "#constants/translations";
 import styles from "./styles.module.scss";
 import DownloadButtonOption from "./DownloadButtonOption";
 import { WithRouter } from "#utils/hooks/WithRouter";
-import { generateRoutes } from "#utils/generateRoutes";
 import { ErrorInPage } from "src/Multiplexer/components";
+import { ROUTES } from "#constants/routes";
 
 // MULTIPLEXER
 
@@ -520,8 +519,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 			],
 		};
 	}
-	// converting reachrouter's rotues to format of react router
-	public ROUTES = generateRoutes(routeSettings);
 
 	public componentDidMount() {
 		// NOTE: this means everything has loaded before mounting this page,
@@ -1154,7 +1151,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 		}
 		return (
 			<Routes>
-				{this.ROUTES.map((route) => (
+				{ROUTES.map((route) => (
 					<Route key={route.path} path={route.path} element={route.element} />
 				))}
 				<Route path="*/" element={<ErrorInPage />} />

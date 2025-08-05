@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import { styled } from "@mui/material/styles";
+import LinearProgress from "@mui/material/LinearProgress";
 import { createRequestClient, ClientAttributes, methods } from "#request";
 import styles from "./styles.module.scss";
 import IconComponent from "../IconComponent";
@@ -35,19 +35,17 @@ interface SuggestedUses {
 }
 
 interface State {}
-const BorderLinearProgress = withStyles(() => ({
-	root: {
-		height: 20,
-		borderRadius: 1,
-	},
-	colorPrimary: {
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+	height: 20,
+	borderRadius: 1,
+	"&.MuiLinearProgress-colorPrimary": {
 		backgroundColor: "grey",
 	},
-	bar: {
+	"& .MuiLinearProgress-bar": {
 		borderRadius: 1,
 		backgroundColor: "#1a90ff",
 	},
-}))(LinearProgress);
+}));
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 	suggestedUsesGetRequest: {

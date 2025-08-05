@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import Spinner from "#rscu/../v2/View/Spinner";
+import Spinner from "#rsu/../v2/View/Spinner";
 import styles from "./styles.module.scss";
 
 interface LoadingProps {

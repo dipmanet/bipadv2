@@ -6,7 +6,7 @@ import NonFieldErrors from "#rsci/NonFieldErrors";
 import { createRequestClient, ClientAttributes, methods } from "#request";
 
 import { languageSelector } from "#selectors";
-import styles from "../../OpenspaceFields/AddOpenspaceTab./styles.module.scss";
+import styles from "../../OpenspaceFields/AddOpenspaceTabs/styles.module.scss";
 
 interface Props {
 	handleTabClick: (tab: string) => void;

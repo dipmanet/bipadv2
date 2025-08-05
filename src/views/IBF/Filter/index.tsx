@@ -6,7 +6,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Redux from "redux";
 import { connect } from "react-redux";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import ReactDOMServer from "react-dom/server";
 import { _cs } from "@togglecorp/fujs";
 import IbfDownArrow from "#resources/icons/IbfDownArrow.svg";

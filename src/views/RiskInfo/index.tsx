@@ -6,7 +6,7 @@ import ActiveLayers from "./ActiveLayers";
 import CapacityAndResourcesLegend from "./LeftPane/Details/CapacityAndResources/Legend";
 import styles from "./styles.module.scss";
 
-interface Props {}
+type Props = unknown;
 
 class RiskInfo extends React.PureComponent<Props> {
 	public state = {
