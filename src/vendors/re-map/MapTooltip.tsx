@@ -37,8 +37,10 @@ const MapTooltip = ({
 
 		return () => {
 			popupRef.current?.remove();
-			rootRef.current?.unmount();
-			tooltipContainerRef.current = null;
+			queueMicrotask(() => {
+				rootRef.current?.unmount();
+				tooltipContainerRef.current = null;
+			});
 		};
 	}, []);
 
@@ -57,7 +59,6 @@ const MapTooltip = ({
 			.addTo(map);
 
 		popupRef.current = popup;
-		console.log("popupRefinitialized", popupRef.current);
 
 		if (coordinates) {
 			popup.setLngLat(coordinates);

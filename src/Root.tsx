@@ -10,7 +10,7 @@ import { iconNames, styleProperties } from "#constants";
 
 import store from "#store";
 import { AppState } from "#store/types";
-import { initializeStyles, setStyleProperties } from "#rscu/styles";
+import { initializeStyles, setStyleProperties } from "#rsu/styles";
 
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
