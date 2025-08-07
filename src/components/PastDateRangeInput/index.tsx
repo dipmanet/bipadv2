@@ -181,12 +181,7 @@ class PastDateRangeInput extends React.Component<Props> {
 		}
 	};
 
-	private pastDataLabelSelector = (d, language) => {
-		if (language === "en") {
-			return d.label;
-		}
-		return d.labelNe;
-	};
+	private pastDataLabelSelector = (d, language) => (language === "en" ? d?.label : d?.labelNe);
 
 	private handleStartDateInputChange = (newStartDate: string) => {
 		const { switchDateValue } = this.state;
@@ -242,9 +237,8 @@ class PastDateRangeInput extends React.Component<Props> {
 		} = this.props;
 		const { customActive, customState, previousLanguage, changedStartDate, changedEndDate } =
 			this.state;
-		const {
-			activeRouteDetails: { name: activePage },
-		} = this.context;
+		const activePage = this.context?.activeRouteDetails?.name;
+
 		const test = convertDateAccToLanguage(value.startDate, language);
 
 		return (

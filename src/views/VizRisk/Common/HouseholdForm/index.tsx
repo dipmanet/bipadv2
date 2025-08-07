@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Loader from "react-loader";
-import Input from "@material-ui/core/Input";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import { makeStyles } from "@material-ui/core/styles";
+import Input from "@mui/material/Input";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
 import {
 	createConnectedRequestCoordinator,
 	createRequestClient,
@@ -21,45 +21,55 @@ interface Props {}
 
 interface Params {}
 
-const useStyles = makeStyles({
-	select: {
-		color: "#ffffff !important",
-		padding: "10px 0",
-		width: "100%",
-		fontSize: "13px",
-		borderBottomColor: "#dddddd !important",
-		"& input::placeholder": {
-			fontSize: "12px",
-		},
-		".MuiSelect-select": {
-			borderBottomColor: "red",
-		},
+// Styled Components to replace makeStyles classes
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+	width: "100%",
+	margin: "15px 0",
+	borderBottomColor: "#dddddd",
+}));
+
+const StyledInputLabel = styled(InputLabel)(({ theme }) => ({
+	fontSize: "13px",
+	color: "white",
+	"&.Mui-focused": {
+		color: "#dddddd",
 	},
-	label: {
+}));
+
+const StyledInput = styled(Input)(({ theme }) => ({
+	color: "#ffffff",
+	width: "100%",
+	fontSize: "13px",
+	padding: "10px 0",
+	borderBottomColor: "#dddddd",
+	"& input::placeholder": {
 		fontSize: "12px",
 		color: "#dddddd",
 	},
-	cssLabel: {
-		color: "white",
-		fontSize: "13px",
-		"&$cssFocused": {
-			color: "#dddddd",
-		},
-	},
-	cssFocused: {},
-	cssUnderline: {
-		color: "#dddddd",
-		"&:after": {
-			borderBottomColor: "#dddddd",
-		},
-	},
-	formControl: {
-		width: "100%",
-		margin: "15px 0",
+	"&:after": {
 		borderBottomColor: "#dddddd",
 	},
-});
+}));
 
+const StyledSelect = styled(Select)(({ theme }) => ({
+	color: "#ffffff",
+	padding: "10px 0",
+	width: "100%",
+	fontSize: "13px",
+	borderBottomColor: "#dddddd",
+	"&.MuiSelect-select": {
+		borderBottomColor: "red",
+	},
+	"&:before": {
+		borderBottomColor: "#dddddd",
+	},
+	"&:after": {
+		borderBottomColor: "#dddddd",
+	},
+}));
+
+// requestOptions stays the same
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 	buildingPostRequest: {
 		url: "/vizrisk-building/",
@@ -105,7 +115,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 };
 
 const HouseholdForm = (props) => {
-	// const [buildingFormData, setFormData] = useState(initialValues);
 	const {
 		requests: { buildingPutRequest, buildingPostRequest, buildingGetRequest },
 		buildingData,
@@ -113,7 +122,7 @@ const HouseholdForm = (props) => {
 		enumData,
 		handleShowForm,
 	} = props;
-	const classes = useStyles();
+
 	const [buildingFormData, setFormData] = useState({ ...buildingData });
 	const [pending, setPending] = useState(false);
 	const { physicalFactors, socialFactors, economicFactor } = getBuildingOptions(enumData);
@@ -219,13 +228,9 @@ const HouseholdForm = (props) => {
 
 	const handleGetSuccess = (resp) => {
 		setPending(false);
-		// hiding form
 		handleShowForm(false, resp);
-
-		// update building data
 	};
 	const handlePostSuccess = (response) => {
-		const { appendBuildingData } = props;
 		buildingGetRequest.do({
 			newId: response.id,
 			handleGetSuccess,
@@ -254,6 +259,7 @@ const HouseholdForm = (props) => {
 	const handleCancel = () => {
 		handleShowForm(false, buildingData);
 	};
+
 	return (
 		<>
 			{pending ? (
@@ -266,20 +272,10 @@ const HouseholdForm = (props) => {
 					<div className={styles.section}>
 						<p>PHYSICAL FACTORS</p>
 						{pfSelectTypes.map((type: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-									<Select
-										classes={{
-											root: classes.select,
-											select: classes.cssUnderline,
-										}}
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledSelect
 										MenuProps={{
 											anchorOrigin: {
 												vertical: "center",
@@ -295,67 +291,48 @@ const HouseholdForm = (props) => {
 										value={buildingFormData[refData[type]]}
 										onChange={(e) => handleFoundation(e, type)}
 										className={styles.select}>
-										<MenuItem value="" disabled selected>
+										<MenuItem value="" disabled>
 											{physicalFactors.filter((pf) => pf.title === type)[0].placeholder}
 										</MenuItem>
 										{physicalFactors
 											.filter((pf) => pf.title === type)[0]
 											.options.map((item: string) => (
-												<MenuItem value={item}>{item}</MenuItem>
+												<MenuItem key={item} value={item}>
+													{item}
+												</MenuItem>
 											))}
-									</Select>
-								</FormControl>
+									</StyledSelect>
+								</StyledFormControl>
 							</div>
 						))}
 						{pfInputTypes.map((type: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-									<Input
-										classes={{
-											root: classes.select,
-											underline: classes.cssUnderline,
-										}}
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledInput
 										placeholder={`Please Enter ${type}`}
 										type="number"
 										value={Number(buildingFormData[refData[type]])}
 										onChange={(e) => handleInput(e, type)}
-										// className={styles.selectElement}
 										className={styles.select}
 									/>
-								</FormControl>
+								</StyledFormControl>
 							</div>
 						))}
 					</div>
+
 					<div className={styles.section}>
 						<p>SOCIAL FACTORS</p>
-						{scSelectTypes.map((type: any, idx: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-
-									<Select
+						{scSelectTypes.map((type: any) => (
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledSelect
 										label={type}
 										placeholder={`Please Enter ${type}`}
 										value={buildingFormData[refData[type]]}
 										onChange={(e) => handleFoundation(e, type)}
 										className={styles.select}
-										classes={{
-											underline: classes.cssUnderline,
-											root: classes.select,
-										}}
 										MenuProps={{
 											anchorOrigin: {
 												vertical: "bottom",
@@ -367,63 +344,44 @@ const HouseholdForm = (props) => {
 											},
 											getContentAnchorEl: null,
 										}}>
-										<MenuItem value="" disabled selected>
+										<MenuItem value="" disabled>
 											{socialFactors.filter((pf) => pf.title === type)[0].placeholder}
 										</MenuItem>
 										{socialFactors
 											.filter((pf) => pf.title === type)[0]
 											.options.map((item: string) => (
-												<MenuItem value={item}>{item}</MenuItem>
+												<MenuItem key={item} value={item}>
+													{item}
+												</MenuItem>
 											))}
-									</Select>
-								</FormControl>
+									</StyledSelect>
+								</StyledFormControl>
 							</div>
 						))}
 						{scInputTypes.map((type: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-
-									<Input
-										classes={{
-											underline: classes.cssUnderline,
-											root: classes.select,
-										}}
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledInput
 										placeholder={`Please Enter ${type}`}
 										type="number"
 										value={buildingFormData[refData[type]]}
 										onChange={(e) => handleInput(e, type)}
 										className={styles.select}
 									/>
-								</FormControl>
+								</StyledFormControl>
 							</div>
 						))}
 					</div>
+
 					<div className={styles.section}>
 						<p>ECONOMIC FACTORS</p>
 						{ecSelectTypes.map((type: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-
-									<Select
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledSelect
 										label={type}
-										classes={{
-											underline: classes.cssUnderline,
-											root: classes.select,
-										}}
 										placeholder={`Please Enter ${type}`}
 										value={buildingFormData[refData[type]]}
 										onChange={(e) => handleFoundation(e, type)}
@@ -439,44 +397,36 @@ const HouseholdForm = (props) => {
 											},
 											getContentAnchorEl: null,
 										}}>
-										<MenuItem value="" disabled selected>
+										<MenuItem value="" disabled>
 											{economicFactor.filter((pf) => pf.title === type)[0].placeholder}
 										</MenuItem>
 										{economicFactor
 											.filter((pf) => pf.title === type)[0]
 											.options.map((item: string) => (
-												<MenuItem value={item}>{item}</MenuItem>
+												<MenuItem key={item} value={item}>
+													{item}
+												</MenuItem>
 											))}
-									</Select>
-								</FormControl>
+									</StyledSelect>
+								</StyledFormControl>
 							</div>
 						))}
 						{ecInputTypes.map((type: any) => (
-							<div className={styles.inputContainer}>
-								<FormControl classes={{ root: classes.formControl }}>
-									<InputLabel
-										classes={{
-											root: classes.cssLabel,
-											focused: classes.cssFocused,
-										}}>
-										{type}
-									</InputLabel>
-
-									<Input
-										classes={{
-											underline: classes.cssUnderline,
-											root: classes.select,
-										}}
+							<div key={type} className={styles.inputContainer}>
+								<StyledFormControl>
+									<StyledInputLabel>{type}</StyledInputLabel>
+									<StyledInput
 										placeholder={`Please Enter ${type}`}
 										type="number"
 										value={buildingFormData[refData[type]]}
 										onChange={(e) => handleInput(e, type)}
 										className={styles.select}
 									/>
-								</FormControl>
+								</StyledFormControl>
 							</div>
 						))}
 					</div>
+
 					<button type="button" onClick={handleSave} className={styles.saveBtn}>
 						Save/Update
 					</button>

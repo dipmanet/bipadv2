@@ -6,7 +6,7 @@ import { StaticMap } from "react-map-gl";
 import mapboxgl from "mapbox-gl";
 import * as d3 from "d3";
 import { MapboxLayer } from "@deck.gl/mapbox";
-import { Spring } from "react-spring/renderprops";
+import { useSpring, animated } from "react-spring";
 import { connect } from "react-redux";
 import { DataFilterExtension } from "@deck.gl/extensions";
 import { wardsSelector } from "#selectors";
@@ -21,7 +21,7 @@ import styles from "./styles.module.scss";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // eslint-disable-next-line import/no-unresolved
 import("mapbox-gl/dist/mapbox-gl-csp-worker").then((worker) => {
-  mapboxgl.workerClass = worker.default;
+	mapboxgl.workerClass = worker.default;
 });
 
 const mapStateToProps = (state, props) => ({

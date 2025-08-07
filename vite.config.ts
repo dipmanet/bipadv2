@@ -46,6 +46,7 @@ export default defineConfig({
 			"#re-map": path.resolve(__dirname, "./src/vendors/re-map"),
 			"#Kalimati": path.resolve(__dirname, "./src/resources/fonts/Kalimati Regular.ttf"),
 			"~base-scss": path.resolve("./src/stylesheets"),
+			"react-map-gl": "react-map-gl/maplibre",
 		},
 	},
 	css: {
@@ -55,6 +56,7 @@ export default defineConfig({
 	},
 
 	optimizeDeps: {
+		exclude: ["react-map-gl", "@react-spring/web"],
 		esbuildOptions: {
 			loader: { ".js": "tsx" },
 		},

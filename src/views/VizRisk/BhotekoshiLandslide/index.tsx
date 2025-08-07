@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
 import React, { useEffect, useState } from "react";
 import { compose, Dispatch } from "redux";
 import { connect } from "react-redux";
@@ -8,8 +6,7 @@ import Loader from "react-loader";
 import { Obj } from "@togglecorp/fujs";
 import memoize from "memoize-one";
 import { FlyToInterpolator } from "react-map-gl";
-import { Spring } from "react-spring/renderprops";
-// import Locations from './locations';
+import { useSpring, animated } from "@react-spring/web";
 
 import {
 	createConnectedRequestCoordinator,
@@ -65,11 +62,10 @@ interface Params {}
 interface ComponentProps {}
 
 interface PropsFromDispatch {
-	// setIncidentList: typeof setIncidentListActionIP;
+	setIncidentList: typeof setIncidentListActionIP;
 	setEventList: typeof setEventListAction;
 }
 interface PropsFromAppState {
-	// incidentList: PageType.Incident[];
 	filters: FiltersElement;
 	hazardTypes: Obj<PageType.HazardType>;
 	regions: {
@@ -83,8 +79,8 @@ interface PropsFromAppState {
 type ReduxProps = ComponentProps & PropsFromDispatch & PropsFromAppState;
 
 type Props = NewProps<ReduxProps, Params>;
+
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-	// incidentList: incidentListSelectorIP(state),
 	hazardTypes: hazardTypesSelector(state),
 	regions: regionsSelector(state),
 	filters: filtersSelector(state),
@@ -98,18 +94,16 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 
 const transformFilters = ({ dataDateRange, region, ...otherFilters }: FiltersElement) => ({
 	...otherFilters,
-	// ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
 	...transformDataRangeLocaleToFilter(dataDateRange, "incident_on"),
 	...transformRegionToFilter(region),
 });
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 	incidentsGetRequest: {
 		url: "/incident/",
 		method: methods.GET,
-		// We have to transform dateRange to incident_on__lt and incident_on__gt
 		query: () => {
 			const filters = {
-				// municipality: 23003,
 				hazard: [17],
 				dataDateRange: {
 					rangeInDays: "custom",
@@ -136,7 +130,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 	incidentsGetRequestBB: {
 		url: "/incident/",
 		method: methods.GET,
-		// We have to transform dateRange to incident_on__lt and incident_on__gt
 		query: () => {
 			const filters = {
 				municipality: 23003,
@@ -166,7 +159,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 	ciRequest: {
 		url: "/resource/",
 		method: methods.GET,
-		// We have to transform dateRange to incident_on__lt and incident_on__gt
 		query: () => ({
 			municipality: 23003,
 		}),
@@ -187,10 +179,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 			count: true,
 			municipality: 23003,
 			bbox: polygon,
-			selector: `${'"'}building${'"'}`,
+			selector: `"building"`,
 		}),
 		onSuccess: ({ response, params: { handleBuidingResponse } }) => {
-			// const {  buildingCount = [] } = response;
 			handleBuidingResponse(response);
 		},
 		onMount: true,
@@ -202,50 +193,43 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 			handlePolyRes(response);
 		},
 		onMount: true,
-		// extras: { schemaName: 'incidentResponse' },
 	},
 };
 
 const leftElements = [
-	<LeftPane1 />,
-	<LeftPane2 />,
-	<LeftPane3 />,
-	<LeftPane4 />,
-	<LeftPane5 />,
-	<LeftPane6 />,
-	<LeftPane7 />,
-	<LeftPane8 />,
-	<LeftPane9 />,
-	<LeftPane10 />,
+	<LeftPane1 key="pane1" />,
+	<LeftPane2 key="pane2" />,
+	<LeftPane3 key="pane3" />,
+	<LeftPane4 key="pane4" />,
+	<LeftPane5 key="pane5" />,
+	<LeftPane6 key="pane6" />,
+	<LeftPane7 key="pane7" />,
+	<LeftPane8 key="pane8" />,
+	<LeftPane9 key="pane9" />,
+	<LeftPane10 key="pane10" />,
 ];
 
-const BarabiseLandslide = (props) => {
+const BarabiseLandslide = (props: Props) => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [location, setLocation] = useState(Locations.nepal);
 	const [viewState, setViewState] = useState(Locations.nepal);
 	const [reAnimate, setReanimate] = useState(false);
 	const [delay, setDelay] = useState(4000);
 	const [pending, setPending] = useState(true);
-	const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
 	const [population, setPopulation] = useState("ward");
 	const [criticalElement, setCriticalElement] = useState("all");
-	// 2
-	const [ci, setCI] = useState([]);
+	const [ci, setCI] = useState<any[]>([]);
 	const [incidentFilterYear, setincidentFilterYear] = useState("2020");
-	// 1
-	const [incidents, setIncidents] = useState([]);
-	// 5
-	const [bahrabiseIncidents, setBarabise] = useState([]);
-	const [landslideYear, setLandSlideYear] = useState([]);
+	const [incidents, setIncidents] = useState<any[]>([]);
+	const [bahrabiseIncidents, setBarabise] = useState<any[]>([]);
+	const [landslideYear, setLandSlideYear] = useState<any[]>([]);
 	const [yearClicked, setyearClicked] = useState(false);
-	// 3
 	const [buildingCount, setBuildingCount] = useState(0);
 	const [defaultBuildcount, setDefault] = useState(0);
-	const [polygon, setPolygon] = useState([]);
-	// 4
-	const [polygonResponse, setPolygonResponse] = useState({});
-	const [drawData, setDrawData] = useState([]);
-	const [chartReset, setChartReset] = useState(null);
+	const [polygon, setPolygon] = useState<any[]>([]);
+	const [polygonResponse, setPolygonResponse] = useState<any>({});
+	const [drawData, setDrawData] = useState<any[]>([]);
+	const [chartReset, setChartReset] = useState<boolean | null>(null);
 	const [showCI, setShowCI] = useState(false);
 	const [hideCILegends, sethideCILegends] = useState(true);
 	const [hideOSMLayers, setHideOSM] = useState(true);
@@ -259,7 +243,6 @@ const BarabiseLandslide = (props) => {
 	const [idle, setIdle] = useState(false);
 
 	const {
-		// incidentList,
 		hazardTypes,
 		regions,
 		requests: {
@@ -270,6 +253,7 @@ const BarabiseLandslide = (props) => {
 			landslidePolyRequest,
 		},
 	} = props;
+
 	const handleAnimationStart = () => setReanimate(false);
 	const getSanitizedIncident = memoize(getSanitizedIncidents);
 
@@ -287,9 +271,9 @@ const BarabiseLandslide = (props) => {
 	}));
 
 	const librariesData = Object.values(cood).map((item) => ({ position: item }));
-	const setNarrationDelay = (delayinMS) => setDelay(delayinMS);
+	const setNarrationDelay = (delayinMS: number) => setDelay(delayinMS);
 
-	const handleCI = (data) => {
+	const handleCI = (data: any[]) => {
 		setCI(data);
 		setReq2(true);
 	};
@@ -298,7 +282,7 @@ const BarabiseLandslide = (props) => {
 		handleCI,
 	});
 
-	const handlePolyRes = (res) => {
+	const handlePolyRes = (res: any) => {
 		setPolygonResponse(res);
 		setReq5(true);
 	};
@@ -308,14 +292,13 @@ const BarabiseLandslide = (props) => {
 		url: getgeoJsonLayer("Bhotekoshi_landslide"),
 	});
 
-	const setIncidentData = (data) => {
+	const setIncidentData = (data: any[]) => {
 		const a = data.map((inc) => ({
 			position: inc.point.coordinates,
 			date: new Date(inc.incidentOn).getTime(),
 			title: inc.title,
 			loss: inc.loss || {},
 		}));
-		// 1
 		setIncidents(a);
 		const lossArr = a.map((item) => item.loss).filter((l) => l !== undefined);
 		const pdC = lossArr.reduce((a, b) => ({
@@ -323,10 +306,9 @@ const BarabiseLandslide = (props) => {
 		}));
 		setLivesLost(pdC.peopleDeathCount);
 		setReq1(true);
-		// setPending(false);
 	};
 
-	const setBarabiseIncidents = (data) => {
+	const setBarabiseIncidents = (data: any[]) => {
 		const bi = data.map((inc) => ({
 			position: inc.point.coordinates,
 			date: new Date(inc.incidentOn).getTime(),
@@ -334,13 +316,10 @@ const BarabiseLandslide = (props) => {
 			loss: inc.loss || {},
 		}));
 		setBarabise(bi);
-
 		setReq3(true);
 	};
 
-	const handlechartReset = () => {
-		setChartReset(!chartReset);
-	};
+	const handlechartReset = () => setChartReset(!chartReset);
 
 	incidentsGetRequest.setDefaultParams({
 		setIncidentList: setIncidentData,
@@ -350,7 +329,7 @@ const BarabiseLandslide = (props) => {
 		setBarabiseIncidents,
 	});
 
-	const handleBuidingResponse = (data) => {
+	const handleBuidingResponse = (data: any) => {
 		setBuildingCount(data);
 		if (defaultBuildcount === 0) {
 			setDefault(data.count);
@@ -358,17 +337,15 @@ const BarabiseLandslide = (props) => {
 		setReq4(true);
 		setDrawPending(false);
 	};
-	const getPolygon = (p) => {
-		setPolygon(p);
-	};
+
+	const getPolygon = (p: any[]) => setPolygon(p);
 
 	buildingCountRequest.setDefaultParams({
 		handleBuidingResponse,
 		setPending,
-		// polygon,
 	});
 
-	const getPolygonString = (p) => {
+	const getPolygonString = (p: any[]) => {
 		const poly = { type: "Polygon", coordinates: p };
 		return JSON.stringify(poly);
 	};
@@ -381,8 +358,9 @@ const BarabiseLandslide = (props) => {
 		}
 	}, [req1, req2, req3, req4, req5]);
 
-	const handleChangeViewState = ({ viewState }) => setViewState(viewState);
-	const handleFlyTo = (destination) => {
+	const handleChangeViewState = ({ viewState }: { viewState: any }) => setViewState(viewState);
+
+	const handleFlyTo = (destination: object) => {
 		setViewState({
 			...viewState,
 			...destination,
@@ -391,13 +369,8 @@ const BarabiseLandslide = (props) => {
 		});
 	};
 
-	const handlePopulationChange = (population) => {
-		setPopulation(population);
-	};
-
-	const handleCIChange = (val) => {
-		setShowCI(val);
-	};
+	const handlePopulationChange = (population: string) => setPopulation(population);
+	const handleCIChange = (val: boolean) => setShowCI(val);
 
 	const handleNext = () => {
 		if (currentPage < leftElements.length) {
@@ -411,23 +384,19 @@ const BarabiseLandslide = (props) => {
 		}
 	};
 
-	const handleCritical = (data) => {
-		setCriticalElement(data);
-	};
-
-	const handleIncidentChange = (incidentYear) => {
+	const handleCritical = (data: string) => setCriticalElement(data);
+	const handleIncidentChange = (incidentYear: string) => {
 		const y = `${Number(incidentYear) + 2011}`;
 		setincidentFilterYear(y);
 	};
 
-	const handleYearSelect = (landSlideYear) => {
+	const handleYearSelect = (landSlideYear: any) => {
 		setLandSlideYear(landSlideYear);
 		setyearClicked(!yearClicked);
 	};
 
-	const handleDrawSelectedData = (result, dataArr) => {
+	const handleDrawSelectedData = (result: any[], dataArr?: any[]) => {
 		setDrawData(result);
-		// buildingCountRequest.do();
 		if (dataArr) {
 			buildingCountRequest.do({
 				polygon: getPolygonString(dataArr),
@@ -436,21 +405,26 @@ const BarabiseLandslide = (props) => {
 		setDrawPending(true);
 	};
 
-	const handlehideCILegends = (data) => {
-		sethideCILegends(data);
-	};
+	const handlehideCILegends = (data: boolean) => sethideCILegends(data);
+	const handlehideOSMLayers = (data: boolean) => setHideOSM(data);
 
-	const handlehideOSMLayers = (data) => {
-		setHideOSM(data);
-	};
-
-	const getIdle = (d: boolean) => {
-		setIdle(d);
-	};
+	const getIdle = (d: boolean) => setIdle(d);
 
 	useEffect(() => {
 		setIdle(false);
 	}, [currentPage]);
+
+	// React Spring hook for opacity animation replacing render props Spring
+	const springProps = useSpring({
+		from: { opacity: 0 },
+		to: { opacity: 1 },
+		config: {
+			duration: 1000,
+			delay,
+		},
+		reset: reAnimate,
+		onStart: handleAnimationStart,
+	});
 
 	return (
 		<>
