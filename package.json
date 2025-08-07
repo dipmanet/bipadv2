@@ -10,7 +10,16 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"sass:migrate:division": "sass-migrator division 'src/**/*.scss' --load-path=src/stylesheets",
+		"sass:migrate:module": "sass-migrator module 'src/**/*.scss' --load-path=src/stylesheets",
+		"sass:migrate:namespace": "sass-migrator namespace 'src/**/*.scss' --load-path=src/stylesheets",
+		"sass:migrate:strict-unary": "sass-migrator strict-unary 'src/**/*.scss' --load-path=src/stylesheets",
+		"sass:migrate:all": "yarn sass:migrate:division && yarn sass:migrate:module && yarn sass:migrate:namespace && yarn sass:migrate:strict-unary",
+		"sass:migrate:division:dry": "sass-migrator division 'src/**/*.scss' --dry-run --load-path=src/stylesheets",
+		"sass:migrate:module:dry": "sass-migrator module 'src/**/*.scss' --dry-run --load-path=src/stylesheets",
+		"sass:migrate:namespace:dry": "sass-migrator namespace 'src/**/*.scss' --dry-run --load-path=src/stylesheets",
+		"sass:migrate:strict-unary:dry": "sass-migrator strict-unary 'src/**/*.scss' --dry-run --load-path=src/stylesheets"
 	},
 	"moduleFileExtensions": [
 		"ts",
@@ -202,6 +211,7 @@
 		"@types/react-loader": "^2.4.8",
 		"@types/react-redux": "^7.1.34",
 		"@types/recharts": "^2.0.1",
+		"@types/sass": "^1.45.0",
 		"@vitejs/plugin-react": "^4.7.0",
 		"body-parser": "^2.2.0",
 		"cache-loader": "^4.1.0",
@@ -217,6 +227,7 @@
 		"interpolate-html-plugin": "^4.0.0",
 		"sass": "^1.89.2",
 		"sass-embedded": "^1.89.2",
+		"sass-migrator": "^2.4.2",
 		"stylelint-config-concentric": "^2.0.2",
 		"stylelint-config-recommended-scss": "^15.0.1",
 		"stylelint-scss": "^6.12.1",

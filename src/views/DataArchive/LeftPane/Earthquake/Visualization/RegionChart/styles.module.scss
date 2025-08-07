@@ -1,42 +1,41 @@
-@import '~base-scss/base';
+@use "../../../../../../stylesheets/base" as *;
 
 .visualizations {
-    padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
-    .hazard-statistics-chart {
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .heading {
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-            .chart-download {
-                padding: 0 $spacing-medium;
-            }
-        }
+	padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
+	.hazard-statistics-chart {
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.heading {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+			.chart-download {
+				padding: 0 $spacing-medium;
+			}
+		}
 
-        .chart {
-            height: 320px;
-            background-color: #fff;
-            overflow: visible !important;
-        }
-    }
+		.chart {
+			height: 320px;
+			background-color: #fff;
+			overflow: visible !important;
+		}
+	}
 
-    .container {
-
-    }
+	.container {
+	}
 }
 
 .message {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
 }
 
 .label-list {
-    font-size: 0.8rem;
-    fill: black;
-    stroke-width: 1.2;
+	font-size: 0.8rem;
+	fill: black;
+	stroke-width: 1.2;
 }

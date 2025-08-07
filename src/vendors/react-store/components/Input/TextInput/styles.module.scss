@@ -1,20 +1,20 @@
-@import '../../../stylesheets/input-border';
+@use "../../../stylesheets/input-border" as *;
 
 .text-input {
-    .input {
-        @extend %input-border;
-    }
+	.input {
+		@extend %input-border;
+	}
 
-    &.error {
-        .input {
-            border-bottom-color: var(--color-danger);
-        }
-    }
+	&.error {
+		.input {
+			border-bottom-color: var(--color-danger);
+		}
+	}
 
-    &.disabled {
-        .input {
-            border-bottom-color: var(--color-separator);
-            color: var(--color-text-disabled);
-        }
-    }
+	&.disabled {
+		.input {
+			border-bottom-color: var(--color-separator);
+			color: var(--color-text-disabled);
+		}
+	}
 }

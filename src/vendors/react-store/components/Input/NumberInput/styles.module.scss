@@ -1,46 +1,46 @@
-@import '../../../stylesheets/input-base';
-@import '../../../stylesheets/input-border';
+@use "../../../stylesheets/input-base" as *;
+@use "../../../stylesheets/input-border" as *;
 
 .number-input {
-    .input {
-        @extend %input-base;
-        @extend %input-border;
-    }
+	.input {
+		@extend %input-base;
+		@extend %input-border;
+	}
 
-    &.focused {
-        .label {
-            color: var(--color-accent);
-        }
-    }
+	&.focused {
+		.label {
+			color: var(--color-accent);
+		}
+	}
 
-    &.error {
-        .input {
-            border-bottom-color: var(--color-danger);
-        }
+	&.error {
+		.input {
+			border-bottom-color: var(--color-danger);
+		}
 
-        .label {
-            color: var(--color-danger);
-        }
-    }
+		.label {
+			color: var(--color-danger);
+		}
+	}
 
-    &.required {
-        .label {
-            font-weight: var(--font-weight-medium);
+	&.required {
+		.label {
+			font-weight: var(--font-weight-medium);
 
-            &::after {
-                content: '*';
-            }
-        }
-    }
+			&::after {
+				content: "*";
+			}
+		}
+	}
 
-    &.disabled {
-        .label {
-            color: var(--color-text-disabled);
-        }
+	&.disabled {
+		.label {
+			color: var(--color-text-disabled);
+		}
 
-        .input {
-            border-bottom-color: var(--color-separator);
-            color: var(--color-text-disabled);
-        }
-    }
+		.input {
+			border-bottom-color: var(--color-separator);
+			color: var(--color-text-disabled);
+		}
+	}
 }

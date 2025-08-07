@@ -1,6 +1,6 @@
-@import "../../../stylesheets/utils";
-@import "../../../stylesheets/input-base";
-@import "../../../stylesheets/input-border";
+@use "../../../stylesheets/utils" as *;
+@use "../../../stylesheets/input-base" as *;
+@use "../../../stylesheets/input-border" as *;
 
 :root {
 	--width-date-picker-container-min: 208px;

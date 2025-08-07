@@ -1,71 +1,71 @@
-@import '~base-scss/base';
+@use "../../../../stylesheets/base" as *;
 
 $width-right-panel: var(--width-right-panel);
 
 .filter {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - var(--spacing-medium) * 2);
 
-    .header {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
+	.header {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
 
-        .heading {
-            flex-grow: 1;
-            padding: $spacing-medium $spacing-small;
-            color: $color-primary;
-        }
+		.heading {
+			flex-grow: 1;
+			padding: $spacing-medium $spacing-small;
+			color: $color-primary;
+		}
 
-        button {
-            flex-shrink: 0;
-        }
-    }
+		button {
+			flex-shrink: 0;
+		}
+	}
 
-    .show-filter-button-container {
-        top: 0;
-        right: 0;
-        transform-origin: 100% 0;
-    }
+	.show-filter-button-container {
+		top: 0;
+		right: 0;
+		transform-origin: 100% 0;
+	}
 
-    .filters-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        transform-origin: 100% 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
-        background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
-        width: $width-right-panel;
-        overflow: auto;
+	.filters-container {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		transform-origin: 100% 0;
+		border: $width-separator-thin solid $color-separator-light;
+		border-radius: $radius-border-large;
+		background-color: rgba(255, 255, 255, 0.9);
+		padding: 0 $spacing-small;
+		width: $width-right-panel;
+		overflow: auto;
 
-        .filter-form {
-            flex-grow: 1;
-            padding: var(--spacing-small);
-            overflow: auto;
+		.filter-form {
+			flex-grow: 1;
+			padding: var(--spacing-small);
+			overflow: auto;
 
-            .region-select-input {
-                margin-bottom: var(--spacing-medium);
-            }
+			.region-select-input {
+				margin-bottom: var(--spacing-medium);
+			}
 
-            .drr-focal-person-checkbox {
-                margin-bottom: var(--spacing-medium);
-            }
-        }
-    }
+			.drr-focal-person-checkbox {
+				margin-bottom: var(--spacing-medium);
+			}
+		}
+	}
 
-    :global {
-        .expanded-container-ghost,
-        .collapsed-container-ghost {
-            top: 0;
-            right: 0;
-        }
+	:global {
+		.expanded-container-ghost,
+		.collapsed-container-ghost {
+			top: 0;
+			right: 0;
+		}
 
-        .expanded-container-expanding {
-            top: 0;
-            right: 0;
-        }
-    }
+		.expanded-container-expanding {
+			top: 0;
+			right: 0;
+		}
+	}
 }

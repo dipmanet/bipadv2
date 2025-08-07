@@ -1,4 +1,4 @@
-@use "../../../stylesheets/utils";
+@use "../../../stylesheets/utils" as *;
 
 .floating-container {
 	@include shadow-small;

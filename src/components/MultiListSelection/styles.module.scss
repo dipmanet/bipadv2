@@ -1,4 +1,4 @@
-@import "~base-scss/base";
+@use "../../stylesheets/base" as *;
 
 .multi-list-selection {
 	padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;

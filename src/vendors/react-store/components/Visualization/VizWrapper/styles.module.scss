@@ -1,63 +1,62 @@
-@import '../../../stylesheets/utils';
-@import '../../../stylesheets/visualizations';
+@use "../../../stylesheets/utils" as *;
+@use "../../../stylesheets/visualizations" as *;
 
 .diagram {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
+	flex-grow: 1;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
 }
 
 .diagram-view {
-    @extend %viz-content;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+	@extend %viz-content;
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
 
-    .header {
+	.header {
+		.right-content {
+			.color-scheme-input-container {
+				display: flex;
+				align-items: center;
 
-        .right-content {
-            .color-scheme-input-container {
-                display: flex;
-                align-items: center;
+				.color-scheme-label {
+					flex-shrink: 0;
+					padding-right: var(--spacing-small);
+					width: auto;
+				}
 
-                .color-scheme-label {
-                    flex-shrink: 0;
-                    padding-right: var(--spacing-small);
-                    width: auto;
-                }
+				.select-input {
+					flex-grow: 1;
+					flex-shrink: 0;
+				}
+			}
 
-                .select-input {
-                    flex-grow: 1;
-                    flex-shrink: 0;
-                }
-            }
+			.action-buttons {
+				flex-shrink: 0;
+				padding-left: var(--spacing-large);
+			}
+		}
+	}
 
-            .action-buttons {
-                flex-shrink: 0;
-                padding-left: var(--spacing-large);
-            }
-        }
-    }
-
-    .diagram {
-        flex-grow: 1;
-    }
+	.diagram {
+		flex-grow: 1;
+	}
 }
 
 .full-screen-container {
-    @extend %viz-content;
+	@extend %viz-content;
 
-    .heading {
-        .back-button {
-            padding: var(--spacing-small) var(--spacing-medium);
-            font-size: var(--font-size-large);
-        }
-    }
+	.heading {
+		.back-button {
+			padding: var(--spacing-small) var(--spacing-medium);
+			font-size: var(--font-size-large);
+		}
+	}
 }
 
 .select-input-options {
-    z-index: 111;
+	z-index: 111;
 }

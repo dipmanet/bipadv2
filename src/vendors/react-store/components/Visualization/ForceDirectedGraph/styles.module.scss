@@ -1,27 +1,27 @@
-@import '../../../stylesheets/utils';
+@use "../../../stylesheets/utils" as *;
 
 .force-directed-graph {
-    .links {
-        stroke: var(--color-links);
-    }
+	.links {
+		stroke: var(--color-links);
+	}
 
-    .nodes :hover {
-        opacity: 1;
-    }
+	.nodes :hover {
+		opacity: 1;
+	}
 }
 
 .tooltip {
-    @include shadow-medium;
+	@include shadow-medium;
 
-    display: block;
-    position: fixed;
-    z-index: 10;
-    background-color: var(--color-foreground);
-    padding: var(--spacing-small) var(--spacing-medium-alt);
-    color: var(--color-text);
-    pointer-events: none;
+	display: block;
+	position: fixed;
+	z-index: 10;
+	background-color: var(--color-foreground);
+	padding: var(--spacing-small) var(--spacing-medium-alt);
+	color: var(--color-text);
+	pointer-events: none;
 
-    .value {
-        display: block;
-    }
+	.value {
+		display: block;
+	}
 }

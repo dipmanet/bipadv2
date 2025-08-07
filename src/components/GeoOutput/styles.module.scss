@@ -1,16 +1,16 @@
-@import '~base-scss/base';
+@use "../../stylesheets/base" as *;
 
 .date-output {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 
-    .icon {
-        flex-shrink: 0;
-        padding-right: $spacing-small;
-        font-size: $font-size-large;
-    }
+	.icon {
+		flex-shrink: 0;
+		padding-right: $spacing-small;
+		font-size: $font-size-large;
+	}
 
-    .formatted-date {
-        flex-grow: 1;
-    }
+	.formatted-date {
+		flex-grow: 1;
+	}
 }
