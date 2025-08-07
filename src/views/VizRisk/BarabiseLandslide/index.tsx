@@ -8,10 +8,7 @@ import Loader from "react-loader";
 import { Obj } from "@togglecorp/fujs";
 import memoize from "memoize-one";
 import { FlyToInterpolator } from "react-map-gl";
-// import { Spring } from 'react-spring/renderprops';
-// import Locations from './locations';
-
-import { Spring } from "react-spring/renderprops";
+import { useSpring, animated } from "@react-spring/web";
 import {
 	createConnectedRequestCoordinator,
 	createRequestClient,

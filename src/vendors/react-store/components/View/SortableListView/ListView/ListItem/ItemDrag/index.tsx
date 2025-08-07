@@ -7,7 +7,7 @@ import Icon from "../../../../../General/Icon";
 import styles from "./styles.module.scss";
 
 const propTypes = {
-	data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+	data: PropTypes.object.isRequired,
 	dataIndex: PropTypes.number.isRequired,
 	dataKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 
