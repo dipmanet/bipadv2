@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { compose, Dispatch } from "redux";
 import { connect } from "react-redux";
 import Loader from "react-loader";
 
 import { Obj } from "@togglecorp/fujs";
 import memoize from "memoize-one";
-import { FlyToInterpolator } from "react-map-gl";
 import { useSpring, animated } from "@react-spring/web";
 
 import {
@@ -34,7 +33,6 @@ import Locations from "./Data/locations";
 import CriticalData from "./Data/criticalInfraData";
 
 import styles from "./styles.module.scss";
-import LandslideData from "./Data/librariesData";
 import legendList from "./Components/Legends/legends";
 import LeftPaneContainer from "../Common/LeftPaneContainer";
 import DemographicsLegends from "../Common/Legends/DemographicsLegends";
@@ -84,7 +82,6 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 	hazardTypes: hazardTypesSelector(state),
 	regions: regionsSelector(state),
 	filters: filtersSelector(state),
-	hazards: hazardTypesSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -209,38 +206,40 @@ const leftElements = [
 	<LeftPane10 key="pane10" />,
 ];
 
-const BarabiseLandslide = (props: Props) => {
-	const [currentPage, setCurrentPage] = useState(0);
+const BarabiseLandslide: React.FC<Props> = (props: Props) => {
+	const [currentPage, setCurrentPage] = useState<number>(0);
 	const [location, setLocation] = useState(Locations.nepal);
 	const [viewState, setViewState] = useState(Locations.nepal);
-	const [reAnimate, setReanimate] = useState(false);
-	const [delay, setDelay] = useState(4000);
-	const [pending, setPending] = useState(true);
-	const [population, setPopulation] = useState("ward");
-	const [criticalElement, setCriticalElement] = useState("all");
+	const [reAnimate, setReanimate] = useState<boolean>(false);
+	const [delay, setDelay] = useState<number>(4000);
+	const [pending, setPending] = useState<boolean>(true);
+	const [population, setPopulation] = useState<string>("ward");
+	const [criticalElement, setCriticalElement] = useState<string>("all");
 	const [ci, setCI] = useState<any[]>([]);
-	const [incidentFilterYear, setincidentFilterYear] = useState("2020");
+	const [incidentFilterYear, setincidentFilterYear] = useState<string>("2020");
 	const [incidents, setIncidents] = useState<any[]>([]);
 	const [bahrabiseIncidents, setBarabise] = useState<any[]>([]);
 	const [landslideYear, setLandSlideYear] = useState<any[]>([]);
-	const [yearClicked, setyearClicked] = useState(false);
-	const [buildingCount, setBuildingCount] = useState(0);
-	const [defaultBuildcount, setDefault] = useState(0);
+	const [yearClicked, setyearClicked] = useState<boolean>(false);
+	const [buildingCount, setBuildingCount] = useState<number>(0);
+	const [defaultBuildcount, setDefault] = useState<number>(0);
 	const [polygon, setPolygon] = useState<any[]>([]);
 	const [polygonResponse, setPolygonResponse] = useState<any>({});
 	const [drawData, setDrawData] = useState<any[]>([]);
 	const [chartReset, setChartReset] = useState<boolean | null>(null);
-	const [showCI, setShowCI] = useState(false);
-	const [hideCILegends, sethideCILegends] = useState(true);
-	const [hideOSMLayers, setHideOSM] = useState(true);
-	const [livesLost, setLivesLost] = useState(0);
-	const [req1, setReq1] = useState(false);
-	const [req2, setReq2] = useState(false);
-	const [req3, setReq3] = useState(false);
-	const [req4, setReq4] = useState(false);
-	const [req5, setReq5] = useState(false);
-	const [drawpending, setDrawPending] = useState(false);
-	const [idle, setIdle] = useState(false);
+	const [showCI, setShowCI] = useState<boolean>(false);
+	const [hideCILegends, sethideCILegends] = useState<boolean>(true);
+	const [hideOSMLayers, setHideOSM] = useState<boolean>(true);
+	const [livesLost, setLivesLost] = useState<number>(0);
+	const [req1, setReq1] = useState<boolean>(false);
+	const [req2, setReq2] = useState<boolean>(false);
+	const [req3, setReq3] = useState<boolean>(false);
+	const [req4, setReq4] = useState<boolean>(false);
+	const [req5, setReq5] = useState<boolean>(false);
+	const [drawpending, setDrawPending] = useState<boolean>(false);
+	const [idle, setIdle] = useState<boolean>(false);
+
+	const mapRef = useRef<{ getMap: () => mapboxgl.Map }>(null);
 
 	const {
 		hazardTypes,
@@ -265,12 +264,12 @@ const BarabiseLandslide = (props: Props) => {
 		ini: 1293819300000,
 		fin: 1609438500000,
 	});
-	const cood = Object.values(pointFeatureCollection)[1].map((item) => ({
+	const cood = Object.values(pointFeatureCollection)[1].map((item: any) => ({
 		position: item.geometry.coordinates,
 		date: item.properties.incidentOn,
 	}));
 
-	const librariesData = Object.values(cood).map((item) => ({ position: item }));
+	const librariesData = Object.values(cood).map((item: any) => ({ position: item }));
 	const setNarrationDelay = (delayinMS: number) => setDelay(delayinMS);
 
 	const handleCI = (data: any[]) => {
@@ -301,9 +300,10 @@ const BarabiseLandslide = (props: Props) => {
 		}));
 		setIncidents(a);
 		const lossArr = a.map((item) => item.loss).filter((l) => l !== undefined);
-		const pdC = lossArr.reduce((a, b) => ({
-			peopleDeathCount: (b.peopleDeathCount || 0) + a.peopleDeathCount,
-		}));
+		const pdC = lossArr.reduce(
+			(a, b) => ({ peopleDeathCount: (b.peopleDeathCount || 0) + a.peopleDeathCount }),
+			{ peopleDeathCount: 0 }
+		);
 		setLivesLost(pdC.peopleDeathCount);
 		setReq1(true);
 	};
@@ -361,12 +361,18 @@ const BarabiseLandslide = (props: Props) => {
 	const handleChangeViewState = ({ viewState }: { viewState: any }) => setViewState(viewState);
 
 	const handleFlyTo = (destination: object) => {
-		setViewState({
-			...viewState,
+		if (mapRef.current) {
+			const map = mapRef.current.getMap();
+			map.flyTo({
+				...destination,
+				duration: 3000,
+				essential: true,
+			});
+		}
+		setViewState((prev) => ({
+			...prev,
 			...destination,
-			transitionDuration: 3000,
-			transitionInterpolator: new FlyToInterpolator(),
-		});
+		}));
 	};
 
 	const handlePopulationChange = (population: string) => setPopulation(population);
@@ -480,107 +486,92 @@ const BarabiseLandslide = (props: Props) => {
 					/>
 				</>
 			)}
-
-			<Spring
-				from={{ opacity: 0 }}
-				to={{ opacity: 1 }}
-				config={{
-					duration: 1000,
-					delay,
-				}}
-				onStart={handleAnimationStart}
-				reset={reAnimate}>
-				{(springProps) => (
-					<LeftPaneContainer
-						render={(props) => (
-							<div className={styles.leftPane}>
-								{currentPage === 0 && (
-									<LeftPane1
-										data={props}
-										incidentsCount={incidents.length}
-										livesLost={livesLost}
-										currentPage={currentPage}
-									/>
-								)}
-								{currentPage === 1 && (
-									// <LeftPane2
-									//     data={props}
-									// />
-									<LeftPane1
-										data={props}
-										currentPage={currentPage}
-										incidentsCount={incidents.length}
-										livesLost={livesLost}
-									/>
-								)}
-								{currentPage === 2 && <LeftPane3 data={props} />}
-								{currentPage === 3 && <LeftPane4 data={props} />}
-								{currentPage === 4 && <LeftPane5 data={props} />}
-								{currentPage === 5 && <LeftPane6 data={props} ci={ci} />}
-								{currentPage === 6 && (
-									<LeftPane7
-										data={props}
-										ci={ci}
-										incidentFilterYear={incidentFilterYear}
-										bahrabiseLandSlide={incidents}
-										landSlide={bahrabiseIncidents}
-									/>
-								)}
-								{currentPage === 7 && (
-									<LeftPane8
-										data={props}
-										ci={ci}
-										incidentFilterYear={incidentFilterYear}
-										bahrabiseLandSlide={incidents}
-										landSlide={bahrabiseIncidents}
-										landslideYear={landslideYear}
-										drawData={drawData}
-										chartReset={chartReset}
-										polygonResponse={polygonResponse}
-									/>
-								)}
-								{currentPage === 8 && (
-									<LeftPane9
-										data={props}
-										ci={ci}
-										incidentFilterYear={incidentFilterYear}
-										bahrabiseLandSlide={incidents}
-										landSlide={bahrabiseIncidents}
-										landslideYear={landslideYear}
-										drawData={drawData}
-										chartReset={chartReset}
-										polygonResponse={polygonResponse}
-									/>
-								)}
-								{currentPage === 9 && (
-									<LeftPane10
-										data={props}
-										ci={ci}
-										incidentFilterYear={incidentFilterYear}
-										bahrabiseLandSlide={incidents}
-										landSlide={bahrabiseIncidents}
-										landslideYear={landslideYear}
-										drawData={drawData}
-										chartReset={chartReset}
-										pending={pending}
-										buildingCount={buildingCount}
-										overallBuildingsCount={defaultBuildcount}
-									/>
-								)}
-								<NavButtons
-									handleNext={handleNext}
-									handlePrev={handlePrev}
-									pagenumber={currentPage + 1}
-									totalPages={leftElements.length}
-									pending={pending}
-									idle={idle}
+			<animated.div style={springProps}>
+				<LeftPaneContainer
+					render={(props) => (
+						<div className={styles.leftPane}>
+							{currentPage === 0 && (
+								<LeftPane1
+									data={props}
+									incidentsCount={incidents.length}
+									livesLost={livesLost}
+									currentPage={currentPage}
 								/>
-							</div>
-						)}
-					/>
-				)}
-			</Spring>
-
+							)}
+							{currentPage === 1 && (
+								<LeftPane1
+									data={props}
+									currentPage={currentPage}
+									incidentsCount={incidents.length}
+									livesLost={livesLost}
+								/>
+							)}
+							{currentPage === 2 && <LeftPane3 data={props} />}
+							{currentPage === 3 && <LeftPane4 data={props} />}
+							{currentPage === 4 && <LeftPane5 data={props} />}
+							{currentPage === 5 && <LeftPane6 data={props} ci={ci} />}
+							{currentPage === 6 && (
+								<LeftPane7
+									data={props}
+									ci={ci}
+									incidentFilterYear={incidentFilterYear}
+									bahrabiseLandSlide={incidents}
+									landSlide={bahrabiseIncidents}
+								/>
+							)}
+							{currentPage === 7 && (
+								<LeftPane8
+									data={props}
+									ci={ci}
+									incidentFilterYear={incidentFilterYear}
+									bahrabiseLandSlide={incidents}
+									landSlide={bahrabiseIncidents}
+									landslideYear={landslideYear}
+									drawData={drawData}
+									chartReset={chartReset}
+									polygonResponse={polygonResponse}
+								/>
+							)}
+							{currentPage === 8 && (
+								<LeftPane9
+									data={props}
+									ci={ci}
+									incidentFilterYear={incidentFilterYear}
+									bahrabiseLandSlide={incidents}
+									landSlide={bahrabiseIncidents}
+									landslideYear={landslideYear}
+									drawData={drawData}
+									chartReset={chartReset}
+									polygonResponse={polygonResponse}
+								/>
+							)}
+							{currentPage === 9 && (
+								<LeftPane10
+									data={props}
+									ci={ci}
+									incidentFilterYear={incidentFilterYear}
+									bahrabiseLandSlide={incidents}
+									landSlide={bahrabiseIncidents}
+									landslideYear={landslideYear}
+									drawData={drawData}
+									chartReset={chartReset}
+									pending={pending}
+									buildingCount={buildingCount}
+									overallBuildingsCount={defaultBuildcount}
+								/>
+							)}
+							<NavButtons
+								handleNext={handleNext}
+								handlePrev={handlePrev}
+								pagenumber={currentPage + 1}
+								totalPages={leftElements.length}
+								pending={pending}
+								idle={idle}
+							/>
+						</div>
+					)}
+				/>
+			</animated.div>
 			{currentPage === 4 && (
 				<DemographicsLegends
 					handlePopulationChange={handlePopulationChange}

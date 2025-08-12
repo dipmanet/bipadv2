@@ -232,12 +232,6 @@ class Rajapur extends React.Component {
 		}));
 	};
 
-	public handleExposedElementChange = (exposed: string) => {
-		this.setState({
-			exposedElement: exposed,
-		});
-	};
-
 	public enableNavBtns = (val) => {
 		if (val === "Right") {
 			this.setState({ disableNavRightBtn: false });

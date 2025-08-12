@@ -1,5 +1,5 @@
-@import '../../../stylesheets/input-base';
+@use "../../../stylesheets/input-base" as *;
 
 .raw-input {
-    @extend %input-base;
+	@extend %input-base;
 }

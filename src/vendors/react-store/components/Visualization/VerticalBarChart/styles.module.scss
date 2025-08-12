@@ -1,47 +1,46 @@
-@import '../../../stylesheets/utils';
+@use "../../../stylesheets/utils" as *;
 
 .vertical-bar-chart {
+	.bar {
+		cursor: pointer;
+	}
 
-    .bar{
-        cursor: pointer;
-    }
+	.xaxis {
+		path {
+			stroke: var(--color-axis-path);
+		}
 
-    .xaxis {
-        path {
-            stroke: var(--color-axis-path);
-        }
+		line {
+			visibility: hidden;
+		}
+	}
 
-        line {
-            visibility: hidden;
-        }
-    }
+	.yaxis {
+		path {
+			stroke: var(--color-axis-path);
+		}
 
-    .yaxis {
-        path {
-            stroke: var(--color-axis-path);
-        }
-
-        line {
-            visibility: hidden;
-        }
-    }
+		line {
+			visibility: hidden;
+		}
+	}
 }
 
 .tooltip {
-    @include shadow-medium;
-    position: fixed;
-    z-index: 10;
-    background-color: var(--color-foreground);
-    padding: var(--spacing-small) var(--spacing-medium-alt);
-    animation: fade-in .2s ease-in;
-    color: var(--color-text-on-foreground);
-    pointer-events: none;
+	@include shadow-medium;
+	position: fixed;
+	z-index: 10;
+	background-color: var(--color-foreground);
+	padding: var(--spacing-small) var(--spacing-medium-alt);
+	animation: fade-in 0.2s ease-in;
+	color: var(--color-text-on-foreground);
+	pointer-events: none;
 
-    .label {
-        display: block;
-    }
+	.label {
+		display: block;
+	}
 
-    .value {
-        display: block;
-    }
+	.value {
+		display: block;
+	}
 }

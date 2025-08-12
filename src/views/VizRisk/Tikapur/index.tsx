@@ -128,12 +128,6 @@ class Tikapur extends React.Component {
 	public handleNext = () => {
 		if (this.state.rightElement < rightelements.length) {
 			this.setState((prevState) => ({ rightElement: prevState.rightElement + 1 }));
-		}
-	};
-
-	public handleNext = () => {
-		if (this.state.rightElement < rightelements.length) {
-			this.setState((prevState) => ({ rightElement: prevState.rightElement + 1 }));
 			this.disableNavBtns("both");
 		}
 	};
@@ -159,12 +153,6 @@ class Tikapur extends React.Component {
 		this.setState((prevState) => ({
 			chisapaniClicked: !prevState.chisapaniClicked,
 		}));
-	};
-
-	public handleExposedElementChange = (exposed: string) => {
-		this.setState({
-			exposedElement: exposed,
-		});
 	};
 
 	public enableNavBtns = (val) => {

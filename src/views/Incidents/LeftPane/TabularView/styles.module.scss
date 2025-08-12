@@ -1,49 +1,47 @@
-@import '~base-scss/base';
+@use "../../../../stylesheets/base" as *;
 
 @font-face {
-    font-family: "Kalimati Regular";
-    src: url('../../../../resources/fonts/Kalimati\ Regular.ttf') format("truetype");
-    unicode-range: U+30-39;
-    size-adjust: 90%;
-
-
+	font-family: "Kalimati Regular";
+	src: url("../../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+	unicode-range: U+30-39;
+	size-adjust: 90%;
 }
 
 .languageFont {
-    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+	font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
 }
 
 .tabular-view {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
 
-    .numeral {
-        display: block;
-        padding: $spacing-small;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+	.numeral {
+		display: block;
+		padding: $spacing-small;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-    .table-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        overflow: auto;
+	.table-container {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		overflow: auto;
 
-        .incidents-table {
-            flex-grow: 1;
+		.incidents-table {
+			flex-grow: 1;
 
-            .head {
-                background-color: $color-background-header;
-                padding: $spacing-small 0;
-            }
-        }
-    }
+			.head {
+				background-color: $color-background-header;
+				padding: $spacing-small 0;
+			}
+		}
+	}
 
-    .download-link-container {
-        flex-shrink: 0;
-        padding: $spacing-medium;
-    }
+	.download-link-container {
+		flex-shrink: 0;
+		padding: $spacing-medium;
+	}
 }

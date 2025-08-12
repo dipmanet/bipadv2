@@ -1,21 +1,20 @@
-@import '../../../stylesheets/utils';
+@use "../../../stylesheets/utils" as *;
 
 .gauge-chart {
+	.arc {
+		cursor: pointer;
+	}
 
-    .arc {
-        cursor: pointer;
-    }
+	.pointer {
+		fill: #008ffb;
+	}
 
-    .pointer {
-        fill: #008FFB;
-    }
+	.pointer-circle {
+		fill: #008ffb;
+	}
 
-    .pointer-circle {
-        fill: #008FFB;
-    }
-
-    .label {
-        font-size: 1.5em;
-        text-anchor: middle;
-    }
+	.label {
+		font-size: 1.5em;
+		text-anchor: middle;
+	}
 }

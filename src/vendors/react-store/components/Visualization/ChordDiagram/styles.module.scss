@@ -1,31 +1,31 @@
-@import '../../../stylesheets/utils';
+@use "../../../stylesheets/utils" as *;
 
 .chord-diagram {
-    .chords {
-        .path {
-            cursor: pointer;
-            stroke: #dcdcdc;
-        }
-    }
+	.chords {
+		.path {
+			cursor: pointer;
+			stroke: #dcdcdc;
+		}
+	}
 
-    .ribbons {
-        .path {
-            stroke: #dcdcdc;
-        }
-    }
+	.ribbons {
+		.path {
+			stroke: #dcdcdc;
+		}
+	}
 }
 
 .tooltip {
-    @include shadow-medium;
+	@include shadow-medium;
 
-    display: none;
-    position: fixed;
-    z-index: 10;
-    background-color: var(--color-foreground);
-    padding: var(--spacing-small) var(--spacing-medium-alt);
-    color: var(--color-text);
+	display: none;
+	position: fixed;
+	z-index: 10;
+	background-color: var(--color-foreground);
+	padding: var(--spacing-small) var(--spacing-medium-alt);
+	color: var(--color-text);
 
-    .label {
-        display: block;
-    }
+	.label {
+		display: block;
+	}
 }

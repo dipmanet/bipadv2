@@ -1,9 +1,8 @@
-@import '~base-scss/base';
+@use "../../stylesheets/base" as *;
 
 .people-loss {
-    .label {
-        margin-bottom: $spacing-extra-small;
-        font-weight: $font-weight-bold;
-    }
+	.label {
+		margin-bottom: $spacing-extra-small;
+		font-weight: $font-weight-bold;
+	}
 }
-

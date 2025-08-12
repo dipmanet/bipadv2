@@ -1,191 +1,190 @@
+@use "sass:math";
+
 $unit: 4px;
-.incidentsSlider{
-    position: fixed;
-    width: 30%;
-    // border: 1px solid red;
-    z-index: 201;
-    left: calc(30% - 60px + 17.5%);
-    bottom: 4%;
-    display: flex;
-    // flex-direction: column;
-    // color: rgb(174, 158, 247);
-    justify-content: center;
-    align-items: center;
-    // border: 1px solid red;
-  background: transparent;
-  padding: 4px;
-    .range-wrap{
-        width: 500px;
-        position: relative;
-        .tickmarks{
-          border: 1px solid red;
-          color: red;
-          // z-index: 9999;
-          // display:none;
-        }
+.incidentsSlider {
+	position: fixed;
+	width: 30%;
+	// border: 1px solid red;
+	z-index: 201;
+	left: calc(30% - 60px + 17.5%);
+	bottom: 4%;
+	display: flex;
+	// flex-direction: column;
+	// color: rgb(174, 158, 247);
+	justify-content: center;
+	align-items: center;
+	// border: 1px solid red;
+	background: transparent;
+	padding: 4px;
+	.range-wrap {
+		width: 500px;
+		position: relative;
+		.tickmarks {
+			border: 1px solid red;
+			color: red;
+			// z-index: 9999;
+			// display:none;
+		}
 
-        // input[type=range]::-webkit-slider-runnable-track { background-color: white;}
-      }
-      .range-value{
-        position: absolute;
-        top: -100%;
-        // border: 1px solid red;
-        z-index: 2;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        margin-left: 2px;
-        color: white;
-      }
-      .range-value span{
-        width: 30px;
-        height: 24px;
-        line-height: 24px;
-        text-align: center;
-        background: #03a9f4;
-        color: #fff;
-        font-size: 12px;
-        display: block;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0);
-        border-radius: 6px;
-      }
-      .range-value span:before{
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-top: 10px solid #03a9f4;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        margin-top: -1px;
-      }
+		// input[type=range]::-webkit-slider-runnable-track { background-color: white;}
+	}
+	.range-value {
+		position: absolute;
+		top: -100%;
+		// border: 1px solid red;
+		z-index: 2;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		margin-left: 2px;
+		color: white;
+	}
+	.range-value span {
+		width: 30px;
+		height: 24px;
+		line-height: 24px;
+		text-align: center;
+		background: #03a9f4;
+		color: #fff;
+		font-size: 12px;
+		display: block;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, 0);
+		border-radius: 6px;
+	}
+	.range-value span:before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-top: 10px solid #03a9f4;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		top: 100%;
+		left: 50%;
+		margin-left: -5px;
+		margin-top: -1px;
+	}
 
-    .playButton{
-        background-color: transparent;
-        filter:saturate(100%);
-        border: none;
-        cursor: pointer;
-        margin-bottom: 15px;
-        .playpauseIcon{
-            font-size: 17px;
-            color: rgb(3, 155, 211);
-            // opacity: 0.37;
-        }
-    }
-    .slider {
-        // -webkit-appearance: none;
-        // width: %;
-        // height: 6px;
-        // background: #d3d3d3;
-        // background: transparent;
-        outline: none;
-        border-radius: 4px;
-        // opacity: 0.9;
-        // -webkit-transition: .2s;
-        // transition: opacity .2s;
-      }
-      
-      .slider:hover {
-        opacity: 1;
-      }
-      
-      .thumb-style{
-        // -webkit-appearance: none;
-        // appearance: none;
-        width: 15px;
-        height: 15px;
-        border-radius: 10px;
-        background: rgb(0,139,191);
-        cursor: pointer;
-      }
-      .slider::-webkit-slider-thumb {
-       @extend .thumb-style;
-      }
-      
-      .slider::-moz-range-thumb {
-        @extend .thumb-style;
-      }
+	.playButton {
+		background-color: transparent;
+		filter: saturate(100%);
+		border: none;
+		cursor: pointer;
+		margin-bottom: 15px;
+		.playpauseIcon {
+			font-size: 17px;
+			color: rgb(3, 155, 211);
+			// opacity: 0.37;
+		}
+	}
+	.slider {
+		// -webkit-appearance: none;
+		// width: %;
+		// height: 6px;
+		// background: #d3d3d3;
+		// background: transparent;
+		outline: none;
+		border-radius: 4px;
+		// opacity: 0.9;
+		// -webkit-transition: .2s;
+		// transition: opacity .2s;
+	}
 
-      @mixin range-track {
-        -webkit-appearance: none;
-        width: 100%;
-        height: $unit * 2;
-        color: transparent;
-        background: lightgray;
-        border-radius: 999px;
-        border: none;
-      }
-      @mixin range-thumb {
-        -webkit-appearance: none;
-        height: $unit * 4;
-        width: $unit * 4;
-        border-radius: 50%;
-        background: rgb(0,139,191);
-        bottom:$unit;
-        
-        position: relative;
-        // box-shadow: 0px 2px 10px -2px black(1);
-      }
-      input[type=range] {
-        -webkit-appearance: none;
-        display: block;
-        margin: 0;
-        width: 100%;
-        background: transparent;
-      }
-      input[type=range]::-webkit-slider-runnable-track {
-        @include range-track();
-      }
-      input[type=range]::-moz-range-track {
-        @include range-track();
-      }
-      input[type=range]::-ms-track {
-        @include range-track();
-      }
-      input[type=range]::-ms-fill-lower {
-        display: none;
-      }
-      input[type=range]::-ms-fill-upper {
-        display: none;
-      }
-      input[type=range]::-webkit-slider-thumb {
-        @include range-thumb();
-      }
-      input[type=range]::-moz-range-thumb {
-        @include range-thumb();
-      }
-      input[type=range]::-ms-thumb {
-        @include range-thumb();
-      }
-      
-      
-      
-      
-      //And now the ticks
-      .ticks {
-        display: flex;
-        justify-content: space-between;
-        
-        //We need left & right padding that's half the width of the range thumb, so all ticks align with the center of the thumb
-        padding: $unit $unit*2;
-      }
-      .tick {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        width: 1px;
-        background: gray;
-        color:white;
-        //Cap the height of the tick & push text down, so the tick renders as a little line and the text doesn't overlap the line. Also add margin, so the container expands enough that the next element you'll add won't overlap the ticks.
-        height: $unit;
-        line-height: $unit * 5;
-        // margin-bottom: $unit*2;
-        margin-top: $unit/2;
-        font-size: 11px;
-      }
+	.slider:hover {
+		opacity: 1;
+	}
+
+	.thumb-style {
+		// -webkit-appearance: none;
+		// appearance: none;
+		width: 15px;
+		height: 15px;
+		border-radius: 10px;
+		background: rgb(0, 139, 191);
+		cursor: pointer;
+	}
+	.slider::-webkit-slider-thumb {
+		@extend .thumb-style;
+	}
+
+	.slider::-moz-range-thumb {
+		@extend .thumb-style;
+	}
+
+	@mixin range-track {
+		-webkit-appearance: none;
+		width: 100%;
+		height: $unit * 2;
+		color: transparent;
+		background: lightgray;
+		border-radius: 999px;
+		border: none;
+	}
+	@mixin range-thumb {
+		-webkit-appearance: none;
+		height: $unit * 4;
+		width: $unit * 4;
+		border-radius: 50%;
+		background: rgb(0, 139, 191);
+		bottom: $unit;
+
+		position: relative;
+		// box-shadow: 0px 2px 10px -2px black(1);
+	}
+	input[type="range"] {
+		-webkit-appearance: none;
+		display: block;
+		margin: 0;
+		width: 100%;
+		background: transparent;
+	}
+	input[type="range"]::-webkit-slider-runnable-track {
+		@include range-track();
+	}
+	input[type="range"]::-moz-range-track {
+		@include range-track();
+	}
+	input[type="range"]::-ms-track {
+		@include range-track();
+	}
+	input[type="range"]::-ms-fill-lower {
+		display: none;
+	}
+	input[type="range"]::-ms-fill-upper {
+		display: none;
+	}
+	input[type="range"]::-webkit-slider-thumb {
+		@include range-thumb();
+	}
+	input[type="range"]::-moz-range-thumb {
+		@include range-thumb();
+	}
+	input[type="range"]::-ms-thumb {
+		@include range-thumb();
+	}
+
+	//And now the ticks
+	.ticks {
+		display: flex;
+		justify-content: space-between;
+
+		//We need left & right padding that's half the width of the range thumb, so all ticks align with the center of the thumb
+		padding: $unit $unit * 2;
+	}
+	.tick {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		width: 1px;
+		background: gray;
+		color: white;
+		//Cap the height of the tick & push text down, so the tick renders as a little line and the text doesn't overlap the line. Also add margin, so the container expands enough that the next element you'll add won't overlap the ticks.
+		height: $unit;
+		line-height: $unit * 5;
+		// margin-bottom: $unit*2;
+		margin-top: math.div($unit, 2);
+		font-size: 11px;
+	}
 }

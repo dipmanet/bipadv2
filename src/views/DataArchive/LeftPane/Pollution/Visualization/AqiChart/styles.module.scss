@@ -1,36 +1,35 @@
-@import '~base-scss/base';
+@use "../../../../../../stylesheets/base" as *;
 
 .visualizations {
-    padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
-    .hazard-statistics-chart {
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .heading {
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-            .chart-download {
-                padding: 0 $spacing-medium;
-            }
-        }
+	padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
+	.hazard-statistics-chart {
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.heading {
+				padding: 0 $spacing-medium;
+				color: $color-accent;
+			}
+			.chart-download {
+				padding: 0 $spacing-medium;
+			}
+		}
 
-        .chart {
-            height: 320px;
-            background-color: #fff;
-            overflow: visible !important;
-        }
-    }
+		.chart {
+			height: 320px;
+			background-color: #fff;
+			overflow: visible !important;
+		}
+	}
 
-    .container {
-
-    }
+	.container {
+	}
 }
 
 .label-list {
-    font-size: 0.8rem;
-    fill: black;
-    stroke-width: 1.2;
-    // stroke: black;
+	font-size: 0.8rem;
+	fill: black;
+	stroke-width: 1.2;
+	// stroke: black;
 }

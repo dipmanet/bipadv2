@@ -1,50 +1,50 @@
-@import '../../../stylesheets/utils';
+@use "../../../stylesheets/utils" as *;
 
 .histogram {
-    .bar {
-        cursor: pointer;
-    }
+	.bar {
+		cursor: pointer;
+	}
 
-    .xaxis {
-        path {
-            stroke: var(--color-accent);
-            stroke-width: var(--width-separator-thin);
-        }
-    }
+	.xaxis {
+		path {
+			stroke: var(--color-accent);
+			stroke-width: var(--width-separator-thin);
+		}
+	}
 
-    .yaxis {
-        path {
-            stroke: var(--color-accent);
-        }
-    }
+	.yaxis {
+		path {
+			stroke: var(--color-accent);
+		}
+	}
 
-    .yaxis-grids {
-        line {
-            stroke-width: var(--width-separator-thin);
-            stroke: var(--color-separator);
+	.yaxis-grids {
+		line {
+			stroke-width: var(--width-separator-thin);
+			stroke: var(--color-separator);
 
-            // TODO: use variables
-            stroke-dasharray: 5, 5;
-        }
+			// TODO: use variables
+			stroke-dasharray: 5, 5;
+		}
 
-        text {
-            visibility: hidden;
-        }
-    }
+		text {
+			visibility: hidden;
+		}
+	}
 }
 
 .tooltip {
-    @include shadow-medium;
-    display: block;
-    position: fixed;
-    z-index: 10;
-    background-color: var(--color-foreground);
-    padding: var(--spacing-small) var(--spacing-medium-alt);
+	@include shadow-medium;
+	display: block;
+	position: fixed;
+	z-index: 10;
+	background-color: var(--color-foreground);
+	padding: var(--spacing-small) var(--spacing-medium-alt);
 
-    // TOOD: user variable for animation duration
-    animation: fade-in .2s ease-in;
+	// TOOD: user variable for animation duration
+	animation: fade-in 0.2s ease-in;
 
-    text-align: center;
-    color: var(--color-text);
-    pointer-events: none;
+	text-align: center;
+	color: var(--color-text);
+	pointer-events: none;
 }
