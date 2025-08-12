@@ -156,20 +156,6 @@ class VirtualizedListView extends React.Component {
 		});
 	};
 
-	updateItemsPerPage = (containerBCR) => {
-		// const { height } = containerBCR;
-		const { itemHeight } = this.state;
-
-		if (!itemHeight) {
-			return;
-		}
-
-		const itemsPerPage = Math.ceil(containerBCR.height / itemHeight);
-		this.setState({
-			itemsPerPage,
-		});
-	};
-
 	handleScroll = (e) => {
 		const { itemHeight } = this.state;
 

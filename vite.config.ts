@@ -46,7 +46,7 @@ export default defineConfig({
 			"#re-map": path.resolve(__dirname, "./src/vendors/re-map"),
 			"#Kalimati": path.resolve(__dirname, "./src/resources/fonts/Kalimati Regular.ttf"),
 			"~base-scss": path.resolve("./src/stylesheets"),
-			"react-map-gl": "react-map-gl/maplibre",
+			"react-map-gl": "react-map-gl/mapbox",
 		},
 	},
 	css: {

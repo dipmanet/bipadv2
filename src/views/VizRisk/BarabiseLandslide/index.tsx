@@ -1,14 +1,14 @@
 /* eslint-disable import/no-unresolved */
-
-import React, { useEffect, useState } from "react";
+/* eslint-disable max-len */
+/* eslint-disable no-shadow */
+import React, { useEffect, useRef, useState } from "react";
 import { compose, Dispatch } from "redux";
 import { connect } from "react-redux";
 import Loader from "react-loader";
 
 import { Obj } from "@togglecorp/fujs";
 import memoize from "memoize-one";
-import { FlyToInterpolator } from "react-map-gl";
-import { useSpring, animated } from "@react-spring/web";
+import { Spring } from "@react-spring/web";
 import {
 	createConnectedRequestCoordinator,
 	createRequestClient,
@@ -218,6 +218,7 @@ const leftElements = [
 ];
 
 const BarabiseLandslide = (props) => {
+	const mapRef = useRef(null);
 	const [landSlidePoints, setlandSlidePoints] = useState(null);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [destination, setDestination] = useState(1);
@@ -276,7 +277,7 @@ const BarabiseLandslide = (props) => {
 	} = props;
 	const handleAnimationStart = () => setReanimate(false);
 	const getSanitizedIncident = memoize(getSanitizedIncidents);
-
+	// eslint-disable-next-line no-shadow
 	const setDestinationhandle = (destination) => setDestination(destination);
 	const incidentList = CriticalData.criticalInfraData;
 	const sanitizedIncidentList = getSanitizedIncident(incidentList, regions, hazardTypes);
@@ -395,13 +396,18 @@ const BarabiseLandslide = (props) => {
 	}, [req1, req2, req3, req4, req5]);
 
 	const handleChangeViewState = ({ viewState }) => setViewState(viewState);
+	// NEW: FlyTo using Mapbox native API
 	const handleFlyTo = (destination) => {
-		setViewState({
-			...viewState,
-			...destination,
-			transitionDuration: 3000,
-			transitionInterpolator: new FlyToInterpolator(),
-		});
+		const map = mapRef.current?.getMap?.();
+		if (map) {
+			map.flyTo({
+				center: [destination.longitude, destination.latitude],
+				zoom: destination.zoom ?? map.getZoom(),
+				speed: 0.8,
+				curve: 1.42,
+				essential: true,
+			});
+		}
 	};
 
 	const handlePopulationChange = (population) => {

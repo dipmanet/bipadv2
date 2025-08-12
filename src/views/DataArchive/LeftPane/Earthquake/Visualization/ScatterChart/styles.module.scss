@@ -1,4 +1,4 @@
-@use "../../../../../../stylesheets/base";
+@use "../../../../../../stylesheets/base" as *;
 
 .visualizations {
 	padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
